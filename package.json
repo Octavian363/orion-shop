@@ -1,0 +1,17 @@
+{
+  "name": "magazin-backend",
+  "version": "1.0.0",
+  "description": "Serverul pentru magazinul meu online de la zero",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.2",
+    "pg": "^8.11.0",
+    "stripe": "^14.0.0",
+    "twilio": "^6.0.2"
+  }
+}
