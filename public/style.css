@@ -15,3 +15,108 @@
     ::-webkit-scrollbar-thumb:hover {
         background: #0051bb; /* Devine mai închis când pui mouse-ul */
     }
+/* ==========================================
+   🎨 DESIGNUL GENERAL AL MAGAZINULUI ORION
+   ========================================== */
+body {
+    background-color: #0b0d19;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Containerul principal al produselor */
+.produse-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+/* Cardul fiecărui produs */
+.produs-card {
+    background: #111424;
+    border: 1px solid #1f243d;
+    border-radius: 12px;
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s;
+}
+
+    .produs-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .produs-card img {
+        max-width: 100%;
+        height: 150px;
+        object-fit: contain;
+        border-radius: 8px;
+    }
+
+/* Butoanele albastre Orion */
+button {
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+
+    button:hover {
+        background-color: #0051bb;
+    }
+
+/* ==========================================
+   📜 SCROLL BAR-UL CEL ȘMECHER (ALBASTRU)
+   ========================================== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #111424;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #0070f3;
+    border-radius: 5px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #0051bb;
+    }
+
+/* ==========================================
+   📱 CODU MAGIC PENTRU TELEFON (MOBILE FRIENDLY)
+   ========================================== */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    /* Pe telefon, produsele se pun frumos unul sub altul */
+    .produse-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .produs-card {
+        width: 90%; /* Ocupă aproape toată lățimea ecranului de telefon */
+        max-width: 320px;
+    }
+
+    h1 {
+        font-size: 24px; /* Micșorăm un pic titlul pe ecran mic */
+        text-align: center;
+    }
+}
