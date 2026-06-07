@@ -102,7 +102,7 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// Order confirmation route via Twilio WhatsApp Sandbox
+// Order confirmation route via Twilio SMS
 app.post('/api/comanda', async (req, res) => {
     const { produse, total, utilizator, adresa } = req.body;
 
@@ -128,14 +128,14 @@ app.post('/api/comanda', async (req, res) => {
     try {
         await clientTwilio.messages.create({
             body: textSMS,
-            to: 'whatsapp:+40720023423',   // 📱 Your verified personal phone number
-            from: 'whatsapp:+14155238886'  // 🚀 Universal Twilio WhatsApp Sandbox number
+            to: '+40720023423',   // 📱 Your verified personal phone number
+            from: process.env.TWILIO_PHONE_NUMBER // 🚀 Reads your Twilio number (+12175823125) dynamically from Railway variables
         });
 
         res.json({ succes: true, mesaj: "Comanda a fost trimisă cu succes!" });
     } catch (error) {
-        console.error("Twilio WhatsApp Error Log:", error);
-        res.status(500).json({ succes: false, mesaj: "Eroare la trimiterea mesajului pe WhatsApp." });
+        console.error("Twilio SMS Error Log:", error);
+        res.status(500).json({ succes: false, mesaj: "Eroare la trimiterea SMS-ului." });
     }
 });
 
