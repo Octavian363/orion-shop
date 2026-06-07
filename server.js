@@ -13,12 +13,17 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// 🔑 Setup Email Transporter using Google App Password from Railway
+// 🔑 Setup Secure Email Transporter using port 587 allowed by cloud providers
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // true for port 465, false for port 587
     auth: {
         user: 'cristiflorea2378@gmail.com',
         pass: process.env.EMAIL_PASS // Secure password read from Railway variables
+    },
+    tls: {
+        rejectUnauthorized: false // Helps prevent local network connection rejections
     }
 });
 
