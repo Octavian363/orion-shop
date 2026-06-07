@@ -1,0 +1,17 @@
+﻿/* Personalizare scroll bar */
+::-webkit-scrollbar {
+    width: 10px; /* Cât de lată să fie bara */
+}
+
+::-webkit-scrollbar-track {
+    background: #111424; /* Culoarea fundalului barei */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #0070f3; /* Albastrul tău strălucitor */
+    border-radius: 5px; /* Colțuri rotunjite */
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #0051bb; /* Devine mai închis când pui mouse-ul */
+    }
