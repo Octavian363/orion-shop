@@ -15,53 +15,49 @@ const twilioClient = twilio(
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public')); // Serves HTML, CSS, and JS from the 'public' folder
 
 // List of products available in the shop
 const products = [
     {
         id: 1,
         name: "Roblox Figurine",
-        descriere: "O figurină rară din universul Roblox pentru colecția ta.",
-        pret: 49.99,
-        imagine: "https://images.rbxcdn.com/cecebe2c77d4c947c6e736df2eb4b74a.png"
+        description: "A rare figurine from the Roblox universe for your collection.",
+        price: 49.99,
+        image: "https://images.rbxcdn.com/cecebe2c77d4c947c6e736df2eb4b74a.png"
     },
     {
         id: 2,
-        name: "Tastatură Gaming RGB",
-        descriere: "Tastatură mecanică rapidă cu lumini spectaculoase.",
-        pret: 189.00,
-        imagine: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=500"
+        name: "RGB Gaming Keyboard",
+        description: "Fast mechanical keyboard with spectacular lighting setup.",
+        price: 189.00,
+        image: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=500"
     }
 ];
 
 // Hardcoded users array for session simulation
 const users = [];
 
-// Base route to check if server is online
-app.get('/', (req, res) => {
-    res.send('Orion Shop Backend is Running Successfully!');
-});
-
 // Route to get all products
-app.get('/api/produse', (req, res) => {
+app.get('/api/products', (req, res) => {
     res.json(products);
 });
 
 // Route for user registration
 app.post('/api/register', (req, res) => {
-    const { username, password, adresa } = req.body;
+    const { username, password, address } = req.body;
     
-    if (!username || !password || !adresa) {
-        return res.status(400).json({ succes: false, mesaj: "Missing fields" });
+    if (!username || !password || !address) {
+        return res.status(400).json({ success: false, message: "Missing fields" });
     }
 
     const userExists = users.find(u => u.username === username);
     if (userExists) {
-        return res.status(400).json({ succes: false, mesaj: "Username already taken" });
+        return res.status(400).json({ success: false, message: "Username already taken" });
     }
 
-    users.push({ username, password, adresa });
-    res.json({ succes: true, mesaj: "Account created successfully!" });
+    users.push({ username, password, address });
+    res.json({ success: true, message: "Account created successfully!" });
 });
 
 // Route for user login
@@ -70,26 +66,26 @@ app.post('/api/login', (req, res) => {
     
     const user = users.find(u => u.username === username && u.password === password);
     if (!user) {
-        return res.status(400).json({ succes: false, mesaj: "Invalid username or password" });
+        return res.status(400).json({ success: false, message: "Invalid username or password" });
     }
 
     res.json({
-        succes: true,
-        mesaj: "Welcome back!",
-        user: { username: user.username, adresa: user.adresa }
+        success: true,
+        message: "Welcome back!",
+        user: { username: user.username, address: user.address }
     });
 });
 
 // Route to handle new orders and send Twilio SMS
-app.post('/api/comanda', (req, res) => {
-    const { produse, total, utilizator, adresa } = req.body;
+app.post('/api/order', (req, res) => {
+    const { products: orderProducts, total, user, address } = req.body;
 
-    if (!produse || produse.length === 0) {
-        return res.status(400).json({ succes: false, mesaj: "Cart is empty" });
+    if (!orderProducts || orderProducts.length === 0) {
+        return res.status(400).json({ success: false, message: "Cart is empty" });
     }
 
-    const productList = produse.map(p => p.name).join(', ');
-    const smsBody = `Orion Shop: Comandă nouă de la ${utilizator}! Produse: [${productList}]. Total: ${total.toFixed(2)} RON. Adresă: ${adresa}.`;
+    const productList = orderProducts.map(p => p.name).join(', ');
+    const smsBody = `Orion Shop: New order from ${user}! Products: [${productList}]. Total: ${total.toFixed(2)} RON. Address: ${address}.`;
 
     // Send SMS via Twilio using Messaging Service SID
     twilioClient.messages.create({
@@ -99,11 +95,11 @@ app.post('/api/comanda', (req, res) => {
     })
     .then(message => {
         console.log(`SMS sent successfully! SID: ${message.sid}`);
-        res.json({ succes: true, mesaj: "Comanda a fost trimisă! SMS-ul a plecat spre administrator." });
+        res.json({ success: true, message: "Order placed successfully! Notification sent to admin." });
     })
     .catch(error => {
         console.error("Twilio Error:", error);
-        res.status(500).json({ succes: false, mesaj: "Failed to send SMS notification, check Twilio setup." });
+        res.status(500).json({ success: false, message: "Failed to send SMS notification, check Twilio setup." });
     });
 });
 
