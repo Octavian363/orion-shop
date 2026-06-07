@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const twilio = require('twilio'); 
+const nodemailer = require('nodemailer'); 
 const fs = require('fs');
 const crypto = require('crypto'); // Native Node.js library for secure password hashing
 
@@ -13,11 +13,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// 🔑 Secret credentials read from environment variables (.env / Railway)
-const accountSid = process.env.TWILIO_ACCOUNT_SID; 
-const authToken = process.env.TWILIO_AUTH_TOKEN; 
-
-const clientTwilio = new twilio(accountSid, authToken);
+// 🔑 Setup Email Transporter using Google App Password from Railway
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'cristiflorea2378@gmail.com',
+        pass: process.env.EMAIL_PASS // Secure password read from Railway variables
+    }
+});
 
 // 📂 Local database saved in a JSON file
 const USERS_FILE = './utilizatori.json';
@@ -102,7 +105,7 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// Order confirmation route via Twilio SMS
+// Order confirmation route via Email Notification
 app.post('/api/comanda', async (req, res) => {
     const { produse, total, utilizator, adresa } = req.body;
 
@@ -123,19 +126,23 @@ app.post('/api/comanda', async (req, res) => {
         productLines.push(`${qty}x ${name}`);
     }
 
-    let textSMS = `Orion Shop: Comandă trimisă de ${utilizator} de la adresa ${adresa}. Comandă: ` + productLines.join(", ") + `. Total: ${total.toFixed(2)} RON`;
+    let emailText = `Orion Shop: New Order! Sent by user "${utilizator}" from address "${adresa}". Items: ` + productLines.join(", ") + `. Total Price: ${total.toFixed(2)} RON`;
+
+    // Configure the mail options
+    const mailOptions = {
+        from: 'cristiflorea2378@gmail.com',
+        to: 'cristiflorea2378@gmail.com', // Sends the alert back to your inbox
+        subject: '🚀 Orion Shop - New Order Received!',
+        text: emailText
+    };
 
     try {
-        await clientTwilio.messages.create({
-            body: textSMS,
-            to: '+40720023423',   // 📱 Your verified personal phone number
-            from: process.env.TWILIO_PHONE_NUMBER // 🚀 Reads your Twilio number (+12175823125) dynamically from Railway variables
-        });
-
-        res.json({ succes: true, mesaj: "Comanda a fost trimisă cu succes!" });
+        // Send the email dynamically
+        await transporter.sendMail(mailOptions);
+        res.json({ succes: true, mesaj: "Comanda a fost trimisă cu succes! Verifică e-mailul." });
     } catch (error) {
-        console.error("Twilio SMS Error Log:", error);
-        res.status(500).json({ succes: false, mesaj: "Eroare la trimiterea SMS-ului." });
+        console.error("Email Delivery Error Log:", error);
+        res.status(500).json({ succes: false, mesaj: "Eroare la trimiterea e-mailului." });
     }
 });
 
