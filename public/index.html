@@ -176,7 +176,7 @@
                     color: white;
                 }
 
-        /* 🔐 FORMULARE EMAG STYLE */
+        /* 🔐 FORMULARE STYLE */
         .formular-orion {
             background: #1e1e38;
             padding: 15px;
@@ -556,8 +556,8 @@
     </div>
 
     <script>
-        // Adresa URL a backend-ului tău de pe Railway
-        const BACKEND_URL = "https://orion-shop-production.up.railway.app";
+        // 🚀 URL-ul tău live de pe Railway salvat corect pentru conectare stabilă
+        const BACKEND_URL = "https://orionshopbackend-production.up.railway.app";
 
         let cos = [];
         let warmeProduse = [];
@@ -665,7 +665,6 @@
         } else {
         schimbaModUser('login');
         }
-        // Resetare câmpuri input
         document.getElementById('auth-username').value = "";
         document.getElementById('auth-password').value = "";
         document.getElementById('auth-adresa').value = "";
@@ -694,8 +693,8 @@
         warmeProduse.forEach(p => {
         container.innerHTML += `
         <div class="card">
-        <img src="${p.imagine}" class="produs-img" alt="${p.nume}">
-        <h3>${p.nume}</h3>
+        <img src="${p.imagine}" class="produs-img" alt="${p.name}">
+        <h3>${p.name}</h3>
         <p>${p.descriere}</p>
         <div class="pret">${p.pret.toFixed(2)} RON</div>
         <button class="btn-cumpara" onclick="adaugaInCos(${p.id})">Adaugă în coș</button>
@@ -732,7 +731,7 @@
         containerElemente.innerHTML += `
         <div class="produs-cos">
         <div>
-        <strong>${p.nume}</strong><br>
+        <strong>${p.name}</strong><br>
         <span style="color: #2ecc71;">${p.pret.toFixed(2)} RON</span>
         </div>
         <button class="sterge-produs" onclick="stergeDinCos(${index})">🗑️</button>
