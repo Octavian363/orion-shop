@@ -1,157 +1,113 @@
-﻿// Load environment variables on the very first line
-require('dotenv').config();
-
+﻿require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer'); 
-const fs = require('fs');
-const crypto = require('crypto'); // Native Node.js library for secure password hashing
+const twilio = require('twilio');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
+// Initialize Twilio Client
+const twilioClient = twilio(
+    process.env.TWILIO_ACCOUNT_SID,
+    process.env.TWILIO_AUTH_TOKEN
+);
+
+// Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
 
-// 🔑 Setup Secure Email Transporter using port 587 allowed by cloud providers
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // true for port 465, false for port 587
-    auth: {
-        user: 'cristiflorea2378@gmail.com',
-        pass: process.env.EMAIL_PASS // Secure password read from Railway variables
+// List of products available in the shop
+const products = [
+    {
+        id: 1,
+        name: "Roblox Figurine",
+        descriere: "O figurină rară din universul Roblox pentru colecția ta.",
+        pret: 49.99,
+        imagine: "https://images.rbxcdn.com/cecebe2c77d4c947c6e736df2eb4b74a.png"
     },
-    tls: {
-        rejectUnauthorized: false // Helps prevent local network connection rejections
+    {
+        id: 2,
+        name: "Tastatură Gaming RGB",
+        descriere: "Tastatură mecanică rapidă cu lumini spectaculoase.",
+        pret: 189.00,
+        imagine: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=500"
     }
-});
-
-// 📂 Local database saved in a JSON file
-const USERS_FILE = './utilizatori.json';
-let Users = [];
-
-if (fs.existsSync(USERS_FILE)) {
-    try {
-        Users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
-    } catch (e) {
-        Users = [];
-    }
-}
-
-function saveUsers() {
-    fs.writeFileSync(USERS_FILE, JSON.stringify(Users, null, 2), 'utf8');
-}
-
-// 🔐 Secure password hashing helper function (SHA-256)
-function hashPassword(password) {
-    return crypto.createHash('sha256').update(password).digest('hex');
-}
-
-// Space shop products catalog
-const HarborProducts = [
-    { id: 1, nume: "OrionAI – Training", descriere: "🤖 OrionAI Bot Premium", pret: 60.00, imagine: "orion.png" },
-    { id: 2, nume: "UNO cards", descriere: "UNO cards no original", pret: 45.00, imagine: "uno.webp" },
-    { id: 3, nume: "Stylus", descriere: "Stylus for a touch screen", pret: 1.50, imagine: "stylus.webp" },
-    { id: 4, nume: "Figurină Roblox", descriere: "Figurină Roblox albastră", pret: 9.99, imagine: "Fallen Guardian.png" } 
 ];
 
-app.get('/api/produse', (req, res) => {
-    res.json(HarborProducts);
+// Hardcoded users array for session simulation
+const users = [];
+
+// Base route to check if server is online
+app.get('/', (req, res) => {
+    res.send('Orion Shop Backend is Running Successfully!');
 });
 
-// 🆕 ROUTE 1: CREATE NEW ACCOUNT (REGISTER)
+// Route to get all products
+app.get('/api/produse', (req, res) => {
+    res.json(products);
+});
+
+// Route for user registration
 app.post('/api/register', (req, res) => {
     const { username, password, adresa } = req.body;
-
+    
     if (!username || !password || !adresa) {
-        return res.status(400).json({ succes: false, mesaj: "Completează toate câmpurile!" });
+        return res.status(400).json({ succes: false, mesaj: "Missing fields" });
     }
 
-    const userExists = Users.find(u => u.username.toLowerCase() === username.toLowerCase().trim());
+    const userExists = users.find(u => u.username === username);
     if (userExists) {
-        return res.status(400).json({ succes: false, mesaj: "Acest nume de utilizator este deja utilizat!" });
+        return res.status(400).json({ succes: false, mesaj: "Username already taken" });
     }
 
-    const newUser = {
-        username: username.trim(),
-        password: hashPassword(password), // Save securely hashed password
-        adresa: adresa.trim()
-    };
-
-    Users.push(newUser);
-    saveUsers();
-
-    res.json({ succes: true, mesaj: "Contul tău a fost creat! Acum te poți conecta." });
+    users.push({ username, password, adresa });
+    res.json({ succes: true, mesaj: "Account created successfully!" });
 });
 
-// 🆕 ROUTE 2: USER SIGN IN (LOGIN)
+// Route for user login
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
-
-    if (!username || !password) {
-        return res.status(400).json({ succes: false, mesaj: "Introdu numele și parola!" });
-    }
-
-    const user = Users.find(u => u.username.toLowerCase() === username.toLowerCase().trim());
+    
+    const user = users.find(u => u.username === username && u.password === password);
     if (!user) {
-        return res.status(400).json({ succes: false, mesaj: "Utilizatorul sau parola sunt incorecte!" });
+        return res.status(400).json({ succes: false, mesaj: "Invalid username or password" });
     }
 
-    if (user.password !== hashPassword(password)) {
-        return res.status(400).json({ succes: false, mesaj: "Utilizatorul sau parola sunt incorecte!" });
-    }
-
-    // Return profile details back to front-end, excluding the hashed password
     res.json({
         succes: true,
-        mesaj: `Te-ai conectat cu succes!`,
+        mesaj: "Welcome back!",
         user: { username: user.username, adresa: user.adresa }
     });
 });
 
-// Order confirmation route via Email Notification
-app.post('/api/comanda', async (req, res) => {
+// Route to handle new orders and send Twilio SMS
+app.post('/api/comanda', (req, res) => {
     const { produse, total, utilizator, adresa } = req.body;
 
     if (!produse || produse.length === 0) {
-        return res.status(400).json({ succes: false, mesaj: "Coșul este gol!" });
-    }
-    if (!utilizator || !adresa) {
-        return res.status(400).json({ succes: false, mesaj: "Te rugăm să te conectezi pentru a trimite comanda!" });
+        return res.status(400).json({ succes: false, mesaj: "Cart is empty" });
     }
 
-    const quantities = {};
-    produse.forEach(p => {
-        quantities[p.nume] = (quantities[p.nume] || 0) + 1;
+    const productList = produse.map(p => p.name).join(', ');
+    const smsBody = `Orion Shop: Comandă nouă de la ${utilizator}! Produse: [${productList}]. Total: ${total.toFixed(2)} RON. Adresă: ${adresa}.`;
+
+    // Send SMS via Twilio using Messaging Service SID
+    twilioClient.messages.create({
+        body: smsBody,
+        messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
+        to: '+40720023423'
+    })
+    .then(message => {
+        console.log(`SMS sent successfully! SID: ${message.sid}`);
+        res.json({ succes: true, mesaj: "Comanda a fost trimisă! SMS-ul a plecat spre administrator." });
+    })
+    .catch(error => {
+        console.error("Twilio Error:", error);
+        res.status(500).json({ succes: false, mesaj: "Failed to send SMS notification, check Twilio setup." });
     });
-
-    const productLines = [];
-    for (const [name, qty] of Object.entries(quantities)) {
-        productLines.push(`${qty}x ${name}`);
-    }
-
-    let emailText = `Orion Shop: New Order! Sent by user "${utilizator}" from address "${adresa}". Items: ` + productLines.join(", ") + `. Total Price: ${total.toFixed(2)} RON`;
-
-    // Configure the mail options
-    const mailOptions = {
-        from: 'cristiflorea2378@gmail.com',
-        to: 'cristiflorea2378@gmail.com', // Sends the alert back to your inbox
-        subject: '🚀 Orion Shop - New Order Received!',
-        text: emailText
-    };
-
-    try {
-        // Send the email dynamically
-        await transporter.sendMail(mailOptions);
-        res.json({ succes: true, mesaj: "Comanda a fost trimisă cu succes! Verifică e-mailul." });
-    } catch (error) {
-        console.error("Email Delivery Error Log:", error);
-        res.status(500).json({ succes: false, mesaj: "Eroare la trimiterea e-mailului." });
-    }
 });
 
-const PORT = process.env.PORT || 8080; 
+// Start Server
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
