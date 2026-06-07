@@ -1,11 +1,11 @@
-﻿// Încărcăm librăria dotenv chiar pe prima linie
+﻿// Load environment variables on the very first line
 require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
 const twilio = require('twilio'); 
 const fs = require('fs');
-const crypto = require('crypto'); // 🔐 Librărie nativă din Node.js pentru securizarea parolelor
+const crypto = require('crypto'); // Native Node.js library for secure password hashing
 
 const app = express();
 
@@ -13,35 +13,35 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// 🔑 DATELE SECRETE CITITE DIN RAILWAY
+// 🔑 Secret credentials read from environment variables (.env / Railway)
 const accountSid = process.env.TWILIO_ACCOUNT_SID; 
 const authToken = process.env.TWILIO_AUTH_TOKEN; 
 
 const clientTwilio = new twilio(accountSid, authToken);
 
-// 📂 Baza de date locală (salvată într-un fișier JSON)
-const FISIER_USERI = './utilizatori.json';
-let Utilizatori = [];
+// 📂 Local database saved in a JSON file
+const USERS_FILE = './utilizatori.json';
+let Users = [];
 
-if (fs.existsSync(FISIER_USERI)) {
+if (fs.existsSync(USERS_FILE)) {
     try {
-        Utilizatori = JSON.parse(fs.readFileSync(FISIER_USERI, 'utf8'));
+        Users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf8'));
     } catch (e) {
-        Utilizatori = [];
+        Users = [];
     }
 }
 
-function salveazaUtilizatorii() {
-    fs.writeFileSync(FISIER_USERI, JSON.stringify(Utilizatori, null, 2), 'utf8');
+function saveUsers() {
+    fs.writeFileSync(USERS_FILE, JSON.stringify(Users, null, 2), 'utf8');
 }
 
-// 🔐 Funcție simplă și sigură de criptare a parolei
-function cripteazaParola(parola) {
-    return crypto.createHash('sha256').update(parola).digest('hex');
+// 🔐 Secure password hashing helper function (SHA-256)
+function hashPassword(password) {
+    return crypto.createHash('sha256').update(password).digest('hex');
 }
 
-// Produsele magazinului spațial făcut de Octavian
-const HarborProduse = [
+// Space shop products catalog
+const HarborProducts = [
     { id: 1, nume: "OrionAI – Training", descriere: "🤖 OrionAI Bot Premium", pret: 60.00, imagine: "orion.png" },
     { id: 2, nume: "UNO cards", descriere: "UNO cards no original", pret: 45.00, imagine: "uno.webp" },
     { id: 3, nume: "Stylus", descriere: "Stylus for a touch screen", pret: 1.50, imagine: "stylus.webp" },
@@ -49,10 +49,10 @@ const HarborProduse = [
 ];
 
 app.get('/api/produse', (req, res) => {
-    res.json(HarborProduse);
+    res.json(HarborProducts);
 });
 
-// 🆕 RUTA 1: CREARE CONT NOU (REGISTER)
+// 🆕 ROUTE 1: CREATE NEW ACCOUNT (REGISTER)
 app.post('/api/register', (req, res) => {
     const { username, password, adresa } = req.body;
 
@@ -60,24 +60,24 @@ app.post('/api/register', (req, res) => {
         return res.status(400).json({ succes: false, mesaj: "Completează toate câmpurile!" });
     }
 
-    const existaUser = Utilizatori.find(u => u.username.toLowerCase() === username.toLowerCase().trim());
-    if (existaUser) {
+    const userExists = Users.find(u => u.username.toLowerCase() === username.toLowerCase().trim());
+    if (userExists) {
         return res.status(400).json({ succes: false, mesaj: "Acest nume de utilizator este deja utilizat!" });
     }
 
-    const nouUtilizator = {
+    const newUser = {
         username: username.trim(),
-        password: cripteazaParola(password), // Salvăm parola criptată complet securizat
+        password: hashPassword(password), // Save securely hashed password
         adresa: adresa.trim()
     };
 
-    Utilizatori.push(nouUtilizator);
-    salveazaUtilizatorii();
+    Users.push(newUser);
+    saveUsers();
 
     res.json({ succes: true, mesaj: "Contul tău a fost creat! Acum te poți conecta." });
 });
 
-// 🆕 RUTA 2: CONECTARE UTILIZATOR (LOGIN)
+// 🆕 ROUTE 2: USER SIGN IN (LOGIN)
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
 
@@ -85,16 +85,16 @@ app.post('/api/login', (req, res) => {
         return res.status(400).json({ succes: false, mesaj: "Introdu numele și parola!" });
     }
 
-    const user = Utilizatori.find(u => u.username.toLowerCase() === username.toLowerCase().trim());
+    const user = Users.find(u => u.username.toLowerCase() === username.toLowerCase().trim());
     if (!user) {
         return res.status(400).json({ succes: false, mesaj: "Utilizatorul sau parola sunt incorecte!" });
     }
 
-    if (user.password !== cripteazaParola(password)) {
+    if (user.password !== hashPassword(password)) {
         return res.status(400).json({ succes: false, mesaj: "Utilizatorul sau parola sunt incorecte!" });
     }
 
-    // Trimitem datele esențiale înapoi la magazin, fără parola criptată
+    // Return profile details back to front-end, excluding the hashed password
     res.json({
         succes: true,
         mesaj: `Te-ai conectat cu succes!`,
@@ -102,7 +102,7 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// Ruta de comandă
+// Order confirmation route via Twilio SMS
 app.post('/api/comanda', async (req, res) => {
     const { produse, total, utilizator, adresa } = req.body;
 
@@ -113,33 +113,33 @@ app.post('/api/comanda', async (req, res) => {
         return res.status(400).json({ succes: false, mesaj: "Te rugăm să te conectezi pentru a trimite comanda!" });
     }
 
-    const cantitati = {};
+    const quantities = {};
     produse.forEach(p => {
-        cantitati[p.nume] = (cantitati[p.nume] || 0) + 1;
+        quantities[p.nume] = (quantities[p.nume] || 0) + 1;
     });
 
-    const liniiProduse = [];
-    for (const [nume, cantitate] of Object.entries(cantitati)) {
-        liniiProduse.push(`${cantitate}x ${nume}`);
+    const productLines = [];
+    for (const [name, qty] of Object.entries(quantities)) {
+        productLines.push(`${qty}x ${name}`);
     }
 
-    let textSMS = `Orion Shop: Comandă trimisă de ${utilizator} de la adresa ${adresa}. Comandă: ` + liniiProduse.join(", ") + `. Total: ${total.toFixed(2)} RON`;
+    let textSMS = `Orion Shop: Comandă trimisă de ${utilizator} de la adresa ${adresa}. Comandă: ` + productLines.join(", ") + `. Total: ${total.toFixed(2)} RON`;
 
     try {
         await clientTwilio.messages.create({
             body: textSMS,
-            to: '+40720023423',   
-            from: '+12175823125'  
+            to: '+40720023423',   // Your verified personal target phone number
+            from: process.env.TWILIO_PHONE_NUMBER // 🚀 Read dynamically from Railway / .env variables
         });
 
         res.json({ succes: true, mesaj: "Comanda a fost trimisă cu succes!" });
-    } catch (eroare) {
-        console.error("Eroare Twilio:", eroare);
+    } catch (error) {
+        console.error("Twilio Error Log:", error);
         res.status(500).json({ succes: false, mesaj: "Eroare la trimiterea SMS-ului." });
     }
 });
 
 const PORT = process.env.PORT || 8080; 
 app.listen(PORT, () => {
-    console.log(`🚀 Serverul magazinului rulează pe portul ${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
