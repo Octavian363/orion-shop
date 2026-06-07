@@ -5,43 +5,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orion Shop</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #0f0f1a; margin: 0; padding: 0; color: #fff; }
-        header { background: linear-gradient(135deg, #1e1e38 0%, #111125 100%); color: white; padding: 2.5rem; text-align: center; position: relative; border-bottom: 3px solid #3498db; }
-        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #0f0f1a;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e1e38 0%, #111125 100%);
+            color: white;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 3px solid #3498db;
+        }
+
+        /* 📜 SCROLL BAR-UL CEL ȘMECHER (ALBASTRU) */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111125;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #00b4db;
+            border-radius: 5px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #0083b0;
+            }
+
         /* 🛒 BUTONUL DE COȘ */
-        .cos-buton { 
-            position: absolute; 
-            left: 20px; 
-            top: 50%; 
-            transform: translateY(-50%); 
+        .cos-buton {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
             background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
-            color: white; 
-            padding: 12px 24px; 
-            border-radius: 50px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            border: none; 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            box-shadow: 0 4px 15px rgba(0, 180, 219, 0.4); 
-            font-size: 1rem; 
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(0, 180, 219, 0.4);
+            font-size: 1rem;
             width: auto;
             transition: all 0.3s ease;
         }
-        .cos-buton:hover { 
-            transform: translateY(-53%) scale(1.05);
-            box-shadow: 0 6px 20px rgba(0, 180, 219, 0.6);
+
+            .cos-buton:hover {
+                transform: translateY(-53%) scale(1.05);
+                box-shadow: 0 6px 20px rgba(0, 180, 219, 0.6);
+            }
+
+            .cos-buton:active {
+                transform: translateY(-48%) scale(0.98);
+            }
+
+        .cos-contor {
+            background: white;
+            color: #0083b0;
+            padding: 3px 10px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            font-weight: 900;
         }
-        .cos-buton:active { transform: translateY(-48%) scale(0.98); }
-        .cos-contor { background: white; color: #0083b0; padding: 3px 10px; border-radius: 50%; font-size: 0.9rem; font-weight: 900; }
 
         /* 🗲 PANOU COȘ */
-        .cos-panou { position: fixed; top: 0; left: -400px; width: 340px; height: 100%; background: #16162a; box-shadow: 5px 0 25px rgba(0,0,0,0.5); transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1000; padding: 25px; display: flex; flex-direction: column; border-right: 2px solid #00b4db; }
-        .cos-panou.deschis { left: 0; }
-        .cos-antet { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #252542; padding-bottom: 15px; margin-bottom: 15px; }
-        .inchide-cos { background: #ff4757; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; width: auto; font-weight: bold; transition: all 0.2s; }
-        .inchide-cos:hover { background: #ff6b81; transform: scale(1.05); }
+        .cos-panou {
+            position: fixed;
+            top: 0;
+            left: -400px;
+            width: 340px;
+            height: 100%;
+            background: #16162a;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+            transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            border-right: 2px solid #00b4db;
+        }
+
+            .cos-panou.deschis {
+                left: 0;
+            }
+
+        .cos-antet {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #252542;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .inchide-cos {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: auto;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+            .inchide-cos:hover {
+                background: #ff6b81;
+                transform: scale(1.05);
+            }
 
         /* 🔐 FORMULAR CONECTARE & LIVRARE */
         .formular-signin {
@@ -51,68 +135,173 @@
             margin-bottom: 15px;
             border: 1px solid #2d2d4f;
         }
-        .formular-signin h3 { margin: 0 0 10px 0; font-size: 1rem; color: #00b4db; text-transform: uppercase; letter-spacing: 0.5px; }
-        .grup-input { margin-bottom: 10px; text-align: left; }
-        .grup-input label { display: block; font-size: 0.8rem; color: #8a8aab; margin-bottom: 4px; }
-        .grup-input input {
-            width: 93%;
-            background: #111125;
-            border: 1px solid #2d2d4f;
-            padding: 10px;
-            border-radius: 8px;
-            color: white;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-        .grup-input input:focus {
-            outline: none;
-            border-color: #00b4db;
-            box-shadow: 0 0 8px rgba(0, 180, 219, 0.4);
+
+            .formular-signin h3 {
+                margin: 0 0 10px 0;
+                font-size: 1rem;
+                color: #00b4db;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+        .grup-input {
+            margin-bottom: 10px;
+            text-align: left;
         }
 
+            .grup-input label {
+                display: block;
+                font-size: 0.8rem;
+                color: #8a8aab;
+                margin-bottom: 4px;
+            }
+
+            .grup-input input {
+                width: 93%;
+                background: #111125;
+                border: 1px solid #2d2d4f;
+                padding: 10px;
+                border-radius: 8px;
+                color: white;
+                font-size: 0.9rem;
+                transition: all 0.3s;
+            }
+
+                .grup-input input:focus {
+                    outline: none;
+                    border-color: #00b4db;
+                    box-shadow: 0 0 8px rgba(0, 180, 219, 0.4);
+                }
+
         /* 🔥 BUTONUL MARE: FINALIZEAZĂ COMANDA */
-        .buton-plata-sus { 
-            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); 
-            color: white; 
-            border: none; 
-            padding: 16px; 
-            border-radius: 12px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            font-size: 1.1rem; 
-            width: 100%; 
-            margin-bottom: 15px; 
-            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4); 
+        .buton-plata-sus {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            width: 100%;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
             transition: all 0.25s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
             border-bottom: 4px solid #1e7e43;
         }
-        .buton-plata-sus:hover { 
-            background: linear-gradient(135deg, #2ed573 0%, #26af5f 100%);
-            box-shadow: 0 8px 22px rgba(46, 204, 113, 0.6);
-            transform: translateY(-2px);
-        }
-        .buton-plata-sus:active { 
-            transform: translateY(2px);
-            border-bottom: 1px solid #1e7e43;
+
+            .buton-plata-sus:hover {
+                background: linear-gradient(135deg, #2ed573 0%, #26af5f 100%);
+                box-shadow: 0 8px 22px rgba(46, 204, 113, 0.6);
+                transform: translateY(-2px);
+            }
+
+            .buton-plata-sus:active {
+                transform: translateY(2px);
+                border-bottom: 1px solid #1e7e43;
+            }
+
+        .cos-total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            padding: 10px 0;
+            border-bottom: 2px solid #252542;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #2ecc71;
         }
 
-        .cos-total { font-size: 1.3rem; font-weight: bold; padding: 10px 0; border-bottom: 2px solid #252542; display: flex; justify-content: space-between; margin-bottom: 10px; color: #2ecc71; }
-        .cos-elemente { flex: 1; overflow-y: auto; }
-        .produs-cos { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #252542; font-size: 0.95rem; }
-        .sterge-produs { background: none; color: #ff4757; border: none; cursor: pointer; font-weight: bold; width: auto; font-size: 1.2rem; transition: transform 0.2s; }
-        .sterge-produs:hover { transform: scale(1.2); }
+        .cos-elemente {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .produs-cos {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #252542;
+            font-size: 0.95rem;
+        }
+
+        .sterge-produs {
+            background: none;
+            color: #ff4757;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            width: auto;
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+
+            .sterge-produs:hover {
+                transform: scale(1.2);
+            }
 
         /* 🛍️ CATALOG PRODUSE */
-        .container { max-width: 1200px; margin: 3rem auto; padding: 0 1rem; }
-        .lista-produse { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2.5rem; }
-        .card { background: #1e1e38; padding: 1.8rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.25); display: flex; flex-direction: column; align-items: center; text-align: center; justify-content: space-between; border: 1px solid #2d2d4f; transition: transform 0.3s ease, border-color 0.3s ease; }
-        .card:hover { transform: translateY(-5px); border-color: #00b4db; }
-        .produs-img { width: 100%; height: 200px; border-radius: 15px; object-fit: cover; margin-bottom: 1.2rem; background-color: #111125; }
-        .card h3 { margin: 0.5rem 0; font-size: 1.3rem; color: #fff; }
-        .card p { margin: 0 0 1.2rem 0; color: #8a8aab; font-size: 0.95rem; }
-        .pret { font-size: 1.5rem; color: #00b4db; font-weight: bold; margin-bottom: 1.2rem; }
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+
+        .lista-produse {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .card {
+            background: #1e1e38;
+            padding: 1.8rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            justify-content: space-between;
+            border: 1px solid #2d2d4f;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+            .card:hover {
+                transform: translateY(-5px);
+                border-color: #00b4db;
+            }
+
+        .produs-img {
+            width: 100%;
+            height: 200px;
+            border-radius: 15px;
+            object-fit: contain;
+            margin-bottom: 1.2rem;
+            background-color: #111125;
+        }
+
+        .card h3 {
+            margin: 0.5rem 0;
+            font-size: 1.3rem;
+            color: #fff;
+        }
+
+        .card p {
+            margin: 0 0 1.2rem 0;
+            color: #8a8aab;
+            font-size: 0.95rem;
+        }
+
+        .pret {
+            font-size: 1.5rem;
+            color: #00b4db;
+            font-weight: bold;
+            margin-bottom: 1.2rem;
+        }
 
         .btn-cumpara {
             background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
@@ -128,12 +317,17 @@
             box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
             border-bottom: 3px solid #1f6594;
         }
-        .btn-cumpara:hover {
-            background: linear-gradient(135deg, #4aa3df 0%, #2e8ece 100%);
-            box-shadow: 0 6px 18px rgba(52, 152, 219, 0.5);
-            transform: translateY(-2px);
-        }
-        .btn-cumpara:active { transform: translateY(2px); border-bottom: 1px solid #1f6594; }
+
+            .btn-cumpara:hover {
+                background: linear-gradient(135deg, #4aa3df 0%, #2e8ece 100%);
+                box-shadow: 0 6px 18px rgba(52, 152, 219, 0.5);
+                transform: translateY(-2px);
+            }
+
+            .btn-cumpara:active {
+                transform: translateY(2px);
+                border-bottom: 1px solid #1f6594;
+            }
 
         /* 🔔 NOTIFICAREA DE SITE */
         .notificare {
@@ -155,11 +349,52 @@
             gap: 10px;
             border: 1px solid #2ed573;
         }
-        .notificare.afisat { top: 30px; }
-        .notificare.eroare {
-            background: linear-gradient(135deg, #ff4757 0%, #ee5253 100%);
-            box-shadow: 0 10px 25px rgba(255, 71, 87, 0.4);
-            border: 1px solid #ff6b81;
+
+            .notificare.afisat {
+                top: 30px;
+            }
+
+            .notificare.eroare {
+                background: linear-gradient(135deg, #ff4757 0%, #ee5253 100%);
+                box-shadow: 0 10px 25px rgba(255, 71, 87, 0.4);
+                border: 1px solid #ff6b81;
+            }
+
+        /* 📱 DESIGN CORECT PENTRU MOBIL (RESPONSIVE) */
+        @media (max-width: 768px) {
+            header {
+                padding: 4.5rem 1rem 1.5rem 1rem;
+            }
+
+            .cos-buton {
+                position: fixed;
+                top: 15px;
+                left: 15px;
+                transform: none;
+                z-index: 999;
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+
+                .cos-buton:hover {
+                    transform: scale(1.05);
+                }
+
+            .cos-panou {
+                width: 85%;
+            }
+
+            .lista-produse {
+                gap: 1.5rem;
+            }
+
+            .card {
+                padding: 1.2rem;
+            }
+
+            .produs-img {
+                height: 160px;
+            }
         }
     </style>
 </head>
@@ -214,133 +449,131 @@
         let warmeProduse = [];
 
         function toggleCos() {
-            document.getElementById('cos-panou').classList.toggle('deschis');
+        document.getElementById('cos-panou').classList.toggle('deschis');
         }
 
         function arataNotificare(mesaj, esteEroare = false) {
-            const el = document.getElementById('zona-notificare');
-            el.innerText = mesaj; // Corectat: eliminat eroarea de sintaxă
-            if (esteEroare) el.classList.add('eroare'); else el.classList.remove('eroare');
-            el.classList.add('afisat');
-            setTimeout(() => { el.classList.remove('afisat'); }, 4000);
+        const el = document.getElementById('zona-notificare');
+        el.innerText = mesaj;
+        if (esteEroare) el.classList.add('eroare'); else el.classList.remove('eroare');
+        el.classList.add('afisat');
+        setTimeout(() => { el.classList.remove('afisat'); }, 4000);
         }
 
         async function aduProdusele() {
-            try {
-                const raspuns = await fetch("/api/produse");
-                warmeProduse = await raspuns.json();
-                const container = document.getElementById('lista-produse');
-                container.innerHTML = "";
+        try {
+        const raspuns = await fetch("/api/produse");
+        warmeProduse = await raspuns.json();
+        const container = document.getElementById('lista-produse');
+        container.innerHTML = "";
 
-                warmeProduse.forEach(p => {
-                    container.innerHTML += `
-                        <div class="card">
-                            <img src="${p.imagine}" class="produs-img" alt="${p.nume}">
-                            <h3>${p.nume}</h3>
-                            <p>${p.descriere}</p>
-                            <div class="pret">${p.pret.toFixed(2)} RON</div>
-                            <button class="btn-cumpara" onclick="adaugaInCos(${p.id})">Adaugă în coș</button>
-                        </div>
-                    `;
-                });
-                
-                // Opțional: Încarcă datele salvate din browser la pornire
-                if(localStorage.getItem('orion_user')) {
-                    document.getElementById('username').value = localStorage.getItem('orion_user');
-                }
-                if(localStorage.getItem('orion_adresa')) {
-                    document.getElementById('adresa').value = localStorage.getItem('orion_adresa');
-                }
+        warmeProduse.forEach(p => {
+        container.innerHTML += `
+        <div class="card">
+        <img src="${p.imagine}" class="produs-img" alt="${p.nume}">
+        <h3>${p.nume}</h3>
+        <p>${p.descriere}</p>
+        <div class="pret">${p.pret.toFixed(2)} RON</div>
+        <button class="btn-cumpara" onclick="adaugaInCos(${p.id})">Adaugă în coș</button>
+        </div>
+        `;
+        });
 
-            } catch (e) {
-                document.getElementById('lista-produse').innerHTML = "❌ Eroare la conectarea cu serverul.";
-            }
+        if(localStorage.getItem('orion_user')) {
+        document.getElementById('username').value = localStorage.getItem('orion_user');
+        }
+        if(localStorage.getItem('orion_adresa')) {
+        document.getElementById('adresa').value = localStorage.getItem('orion_adresa');
+        }
+
+        } catch (e) {
+        document.getElementById('lista-produse').innerHTML = "❌ Eroare la conectarea cu serverul.";
+        }
         }
 
         function adaugaInCos(id) {
-            const produs = warmeProduse.find(p => p.id === id);
-            if (produs) {
-                cos.push(produs);
-                actualizeazaGraficCos();
-            }
+        const produs = warmeProduse.find(p => p.id === id);
+        if (produs) {
+        cos.push(produs);
+        actualizeazaGraficCos();
+        }
         }
 
         function stergeDinCos(index) {
-            cos.splice(index, 1);
-            actualizeazaGraficCos();
+        cos.splice(index, 1);
+        actualizeazaGraficCos();
         }
 
         function actualizeazaGraficCos() {
-            document.getElementById('cos-contor').innerText = cos.length;
-            const containerElemente = document.getElementById('cos-elemente');
-            
-            if (cos.length === 0) {
-                containerElemente.innerHTML = '<p style="color: #6a6a8a; text-align: center;">Coșul este gol.</p>';
-            } else {
-                containerElemente.innerHTML = "";
-                cos.forEach((p, index) => {
-                    containerElemente.innerHTML += `
-                        <div class="produs-cos">
-                            <div>
-                                <strong>${p.nume}</strong><br>
-                                <span style="color: #2ecc71;">${p.pret.toFixed(2)} RON</span>
-                            </div>
-                            <button class="sterge-produs" onclick="stergeDinCos(${index})">🗑️</button>
-                        </div>
-                    `;
-                });
-            }
+        document.getElementById('cos-contor').innerText = cos.length;
+        const containerElemente = document.getElementById('cos-elemente');
 
-            const total = cos.reduce((suma, p) => suma + p.pret, 0);
-            document.getElementById('cos-total-pret').innerText = total.toFixed(2) + " RON";
+        if (cos.length === 0) {
+        containerElemente.innerHTML = '<p style="color: #6a6a8a; text-align: center;">Coșul este gol.</p>';
+        } else {
+        containerElemente.innerHTML = "";
+        cos.forEach((p, index) => {
+        containerElemente.innerHTML += `
+        <div class="produs-cos">
+        <div>
+        <strong>${p.nume}</strong><br>
+        <span style="color: #2ecc71;">${p.pret.toFixed(2)} RON</span>
+        </div>
+        <button class="sterge-produs" onclick="stergeDinCos(${index})">🗑️</button>
+        </div>
+        `;
+        });
+        }
+
+        const total = cos.reduce((suma, p) => suma + p.pret, 0);
+        document.getElementById('cos-total-pret').innerText = total.toFixed(2) + " RON";
         }
 
         async function trimiteComandaLaServer() {
-            if (cos.length === 0) {
-                arataNotificare("⚠️ Adaugă produse în coș mai întâi!", true);
-                return;
-            }
+        if (cos.length === 0) {
+        arataNotificare("⚠️ Adaugă produse în coș mai întâi!", true);
+        return;
+        }
 
-            const userInscris = document.getElementById('username').value.trim();
-            const adresaInscrisa = document.getElementById('adresa').value.trim();
+        const userInscris = document.getElementById('username').value.trim();
+        const adresaInscrisa = document.getElementById('adresa').value.trim();
 
-            if (!userInscris || !adresaInscrisa) {
-                arataNotificare("⚠️ Te rugăm să pui Numele și Adresa pentru livrare!", true);
-                return;
-            }
+        if (!userInscris || !adresaInscrisa) {
+        arataNotificare("⚠️ Te rugăm să pui Numele și Adresa pentru livrare!", true);
+        return;
+        }
 
-            // Salvează datele în browser ca să nu le mai scrie data viitoare
-            localStorage.setItem('orion_user', userInscris);
-            localStorage.setItem('orion_adresa', adresaInscrisa);
+        localStorage.setItem('orion_user', userInscris);
+        localStorage.setItem('orion_adresa', adresaInscrisa);
 
-            const totalPret = cos.reduce((suma, p) => suma + p.pret, 0);
+        const totalPret = cos.reduce((suma, p) => suma + p.pret, 0);
 
-            try {
-                const response = await fetch('/api/comanda', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        produse: cos, 
-                        total: totalPret,
-                        utilizator: userInscris,
-                        adresa: adresaInscrisa
-                    })
-                });
+        try {
+        const response = await fetch('/api/comanda', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+        produse: cos,
+        total: totalPret,
+        utilizator: userInscris,
+        adresa: adresaInscrisa
+        })
+        });
 
-                const rezultat = await response.json();
-                
-                if(rezultat.succes) {
-                    arataNotificare("🚀 " + rezultat.mesaj, false);
-                    cos = [];
-                    actualizeazaGraficCos();
-                    toggleCos();
-                } else {
-                    arataNotificare("❌ " + rezultat.mesaj, true);
-                }
-                
-            } catch (error) {
-                arataNotificare("❌ Serverul nu a răspuns la comandă.", true);
-            }
+        const rezultat = await response.json();
+
+        if(rezultat.succes) {
+        arataNotificare("🚀 " + rezultat.mesaj, false);
+        cos = [];
+        actualizeazaGraficCos();
+        toggleCos();
+        } else {
+        arataNotificare("❌ " + rezultat.mesaj, true);
+        }
+
+        } catch (error) {
+        arataNotificare("❌ Serverul nu a răspuns la comandă.", true);
+        }
         }
 
         window.addEventListener('DOMContentLoaded', aduProdusele);
