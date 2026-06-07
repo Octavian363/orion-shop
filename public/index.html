@@ -40,12 +40,17 @@
                 background: #0083b0;
             }
 
-        /* 🛒 BUTONUL DE COȘ */
-        .cos-buton {
+        /* 🛒 & 👤 BUTOANELE DIN ANTET */
+        .antet-butoane {
             position: absolute;
             left: 20px;
             top: 50%;
             transform: translateY(-50%);
+            display: flex;
+            gap: 15px;
+        }
+
+        .cos-buton, .user-buton {
             background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
             color: white;
             padding: 12px 24px;
@@ -62,13 +67,13 @@
             transition: all 0.3s ease;
         }
 
-            .cos-buton:hover {
-                transform: translateY(-53%) scale(1.05);
+            .cos-buton:hover, .user-buton:hover {
+                transform: scale(1.05);
                 box-shadow: 0 6px 20px rgba(0, 180, 219, 0.6);
             }
 
-            .cos-buton:active {
-                transform: translateY(-48%) scale(0.98);
+            .cos-buton:active, .user-buton:active {
+                transform: scale(0.98);
             }
 
         .cos-contor {
@@ -80,28 +85,40 @@
             font-weight: 900;
         }
 
-        /* 🗲 PANOU COȘ */
-        .cos-panou {
+        /* 🗲 PANOURILE GLISANTE (COȘ & CONT) */
+        .panou-lateral {
             position: fixed;
             top: 0;
-            left: -400px;
             width: 340px;
             height: 100%;
             background: #16162a;
             box-shadow: 5px 0 25px rgba(0,0,0,0.5);
-            transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 1000;
             padding: 25px;
             display: flex;
             flex-direction: column;
+        }
+
+        #cos-panou {
+            left: -400px;
             border-right: 2px solid #00b4db;
         }
 
-            .cos-panou.deschis {
+            #cos-panou.deschis {
                 left: 0;
             }
 
-        .cos-antet {
+        #user-panou {
+            right: -400px;
+            border-left: 2px solid #00b4db;
+        }
+
+            #user-panou.deschis {
+                right: 0;
+            }
+
+        .panou-antet {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -110,7 +127,7 @@
             margin-bottom: 15px;
         }
 
-        .inchide-cos {
+        .inchide-panou {
             background: #ff4757;
             color: white;
             border: none;
@@ -122,13 +139,40 @@
             transition: all 0.2s;
         }
 
-            .inchide-cos:hover {
+            .inchide-panou:hover {
                 background: #ff6b81;
                 transform: scale(1.05);
             }
 
-        /* 🔐 FORMULAR CONECTARE & LIVRARE */
-        .formular-signin {
+        /* 🔀 BUTOANE SCHIMBARE MOD (SIGN IN / SIGN UP) */
+        .comutator-mod {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #111125;
+            padding: 5px;
+            border-radius: 8px;
+        }
+
+            .comutator-mod button {
+                flex: 1;
+                background: transparent;
+                color: #8a8aab;
+                border: none;
+                padding: 8px;
+                cursor: pointer;
+                font-weight: bold;
+                border-radius: 6px;
+                transition: all 0.2s;
+            }
+
+                .comutator-mod button.activ {
+                    background: #00b4db;
+                    color: white;
+                }
+
+        /* 🔐 FORMULARE EMAG STYLE */
+        .formular-orion {
             background: #1e1e38;
             padding: 15px;
             border-radius: 12px;
@@ -136,16 +180,15 @@
             border: 1px solid #2d2d4f;
         }
 
-            .formular-signin h3 {
-                margin: 0 0 10px 0;
-                font-size: 1rem;
+            .formular-orion h3 {
+                margin: 0 0 15px 0;
+                font-size: 1.1rem;
                 color: #00b4db;
                 text-transform: uppercase;
-                letter-spacing: 0.5px;
             }
 
         .grup-input {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             text-align: left;
         }
 
@@ -172,6 +215,43 @@
                     border-color: #00b4db;
                     box-shadow: 0 0 8px rgba(0, 180, 219, 0.4);
                 }
+
+        .btn-actiune {
+            background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+            .btn-actiune:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 180, 219, 0.3);
+            }
+
+        .info-status-conectat {
+            text-align: center;
+            padding: 20px 10px;
+            background: #1e1e38;
+            border-radius: 12px;
+            border: 1px solid #2d2d4f;
+        }
+
+        .btn-deconectare {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+            width: 100%;
+        }
 
         /* 🔥 BUTONUL MARE: FINALIZEAZĂ COMANDA */
         .buton-plata-sus {
@@ -324,11 +404,6 @@
                 transform: translateY(-2px);
             }
 
-            .btn-cumpara:active {
-                transform: translateY(2px);
-                border-bottom: 1px solid #1f6594;
-            }
-
         /* 🔔 NOTIFICAREA DE SITE */
         .notificare {
             position: fixed;
@@ -360,36 +435,34 @@
                 border: 1px solid #ff6b81;
             }
 
-        /* 📱 DESIGN CORECT PENTRU MOBIL (RESPONSIVE) */
+        /* 📱 RESPONSIVE MOBIL */
         @media (max-width: 768px) {
             header {
-                padding: 4.5rem 1rem 1.5rem 1rem;
+                padding: 5rem 1rem 1.5rem 1rem;
             }
 
-            .cos-buton {
+            .antet-butoane {
                 position: fixed;
-                top: 15px;
-                left: 15px;
+                top: 12px;
+                left: 12px;
                 transform: none;
                 z-index: 999;
-                padding: 8px 16px;
-                font-size: 0.9rem;
+                gap: 8px;
+                width: calc(100% - 24px);
+                justify-content: space-between;
             }
 
-                .cos-buton:hover {
-                    transform: scale(1.05);
-                }
+            .cos-buton, .user-buton {
+                padding: 8px 14px;
+                font-size: 0.85rem;
+            }
 
-            .cos-panou {
+            .panou-lateral {
                 width: 85%;
             }
 
             .lista-produse {
                 gap: 1.5rem;
-            }
-
-            .card {
-                padding: 1.2rem;
             }
 
             .produs-img {
@@ -400,32 +473,25 @@
 </head>
 <body>
 
-    <div id="zona-notificare" class="notificare">🚀 Comandă trimisă cu succes!</div>
+    <div id="zona-notificare" class="notificare">🚀 Acțiune reușită!</div>
 
     <header>
-        <button class="cos-buton" onclick="toggleCos()">
-            🛒 Coș <span id="cos-contor" class="cos-contor">0</span>
-        </button>
+        <div class="antet-butoane">
+            <button class="cos-buton" onclick="toggleCos()">
+                🛒 Coș <span id="cos-contor" class="cos-contor">0</span>
+            </button>
+            <button class="user-buton" id="btn-meniu-user" onclick="toggleUserMeniu()">
+                👤 Contul meu
+            </button>
+        </div>
         <h1>🛍️ Orion Shop</h1>
         <p style="color: #8a8aab; margin: 5px 0 0 0;">Magazinul Orion facut de Octavian</p>
     </header>
 
-    <div id="cos-panou" class="cos-panou">
-        <div class="cos-antet">
+    <div id="cos-panou" class="panou-lateral">
+        <div class="panou-antet">
             <h2>Coșul tău</h2>
-            <button class="inchide-cos" onclick="toggleCos()">X</button>
-        </div>
-
-        <div class="formular-signin">
-            <h3>Conectare & Livrare</h3>
-            <div class="grup-input">
-                <label for="username">Nume Utilizator / User</label>
-                <input type="text" id="username" placeholder="Ex: Octavian20">
-            </div>
-            <div class="grup-input">
-                <label for="adresa">Adresă Completă</label>
-                <input type="text" id="adresa" placeholder="Strada, Numărul, Orașul">
-            </div>
+            <button class="inchide-panou" onclick="toggleCos()">X</button>
         </div>
 
         <button class="buton-plata-sus" onclick="trimiteComandaLaServer()">Finalizează Comanda</button>
@@ -440,6 +506,46 @@
         </div>
     </div>
 
+    <div id="user-panou" class="panou-lateral">
+        <div class="panou-antet">
+            <h2 id="user-titlu-panou">Autentificare</h2>
+            <button class="inchide-panou" onclick="toggleUserMeniu()">X</button>
+        </div>
+
+        <div id="sectiune-vizitator">
+            <div class="comutator-mod">
+                <button id="btn-mod-login" class="activ" onclick="schimbaModUser('login')">Sign In</button>
+                <button id="btn-mod-register" onclick="schimbaModUser('register')">Sign Up</button>
+            </div>
+
+            <div class="formular-orion">
+                <div class="grup-input">
+                    <label>Nume Utilizator / User</label>
+                    <input type="text" id="auth-username" placeholder="Ex: Octavian363">
+                </div>
+                <div class="grup-input">
+                    <label>Parolă / Password</label>
+                    <input type="password" id="auth-password" placeholder="••••••••">
+                </div>
+                <div class="grup-input" id="grup-input-adresa" style="display: none;">
+                    <label>Adresă Completă Livrare</label>
+                    <input type="text" id="auth-adresa" placeholder="Oraș, Stradă, Număr">
+                </div>
+
+                <button class="btn-actiune" id="btn-auth-trimite" onclick="executaAutentificare()">Sign In</button>
+            </div>
+        </div>
+
+        <div id="sectiune-conectat" style="display: none;">
+            <div class="info-status-conectat">
+                <h3 style="color: #2ecc71; margin-top: 0;">✓ Cont Conectat</h3>
+                <p id="info-user-salut" style="font-size: 1.1rem; font-weight: bold;"></p>
+                <p id="info-user-adresa" style="color: #8a8aab; font-size: 0.9rem;"></p>
+                <button class="btn-deconectare" onclick="deconectareUtilizator()">Deconectare / Sign Out</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div id="lista-produse" class="lista-produse">🔄 Se încarcă catalogul spatial...</div>
     </div>
@@ -447,9 +553,37 @@
     <script>
         let cos = [];
         let warmeProduse = [];
+        let modCurentUser = 'login'; // 'login' sau 'register'
+        let utilizatorLogat = null; // Stochează datele când userul e conectat
 
         function toggleCos() {
         document.getElementById('cos-panou').classList.toggle('deschis');
+        document.getElementById('user-panou').classList.remove('deschis');
+        }
+
+        function toggleUserMeniu() {
+        document.getElementById('user-panou').classList.toggle('deschis');
+        document.getElementById('cos-panou').classList.remove('deschis');
+        }
+
+        function schimbaModUser(mod) {
+        modCurentUser = mod;
+        const btnLogin = document.getElementById('btn-mod-login');
+        const btnRegister = document.getElementById('btn-mod-register');
+        const grupAdresa = document.getElementById('grup-input-adresa');
+        const btnTrimite = document.getElementById('btn-auth-trimite');
+
+        if (mod === 'login') {
+        btnLogin.classList.add('activ');
+        btnRegister.classList.remove('activ');
+        grupAdresa.style.display = 'none';
+        btnTrimite.innerText = 'Sign In';
+        } else {
+        btnRegister.classList.add('activ');
+        btnLogin.classList.remove('activ');
+        grupAdresa.style.display = 'block';
+        btnTrimite.innerText = 'Sign Up (Creare Cont)';
+        }
         }
 
         function arataNotificare(mesaj, esteEroare = false) {
@@ -458,6 +592,88 @@
         if (esteEroare) el.classList.add('eroare'); else el.classList.remove('eroare');
         el.classList.add('afisat');
         setTimeout(() => { el.classList.remove('afisat'); }, 4000);
+        }
+
+        // Verifică starea conectării la pornirea paginii
+        function verificaStareConectare() {
+        const stocat = localStorage.getItem('orion_user_session');
+        if (stocat) {
+        utilizatorLogat = JSON.parse(stocat);
+        actualizeazaInterfataUtilizator();
+        }
+        }
+
+        function actualizeazaInterfataUtilizator() {
+        const secVizitator = document.getElementById('sectiune-vizitator');
+        const secConectat = document.getElementById('sectiune-conectat');
+        const btnMeniu = document.getElementById('btn-meniu-user');
+
+        if (utilizatorLogat) {
+        secVizitator.style.display = 'none';
+        secConectat.style.display = 'block';
+        btnMeniu.innerText = `👤 ${utilizatorLogat.username}`;
+        document.getElementById('info-user-salut').innerText = `Salut, ${utilizatorLogat.username}!`;
+        document.getElementById('info-user-adresa').innerText = `Adresă: ${utilizatorLogat.adresa}`;
+        } else {
+        secVizitator.style.display = 'block';
+        secConectat.style.display = 'none';
+        btnMeniu.innerText = '👤 Contul meu';
+        }
+        }
+
+        async function executaAutentificare() {
+        const username = document.getElementById('auth-username').value.trim();
+        const password = document.getElementById('auth-password').value.trim();
+        const adresa = document.getElementById('auth-adresa').value.trim();
+
+        if (!username || !password) {
+        arataNotificare("⚠️ Introdu numele de utilizator și parola!", true);
+        return;
+        }
+
+        if (modCurentUser === 'register' && !adresa) {
+        arataNotificare("⚠️ Te rugăm să adaugi o adresă de livrare!", true);
+        return;
+        }
+
+        const ruta = modCurentUser === 'login' ? '/api/login' : '/api/register';
+        const dateTrise = modCurentUser === 'login' ? { username, password } : { username, password, adresa };
+
+        try {
+        const raspuns = await fetch(ruta, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dateTrise)
+        });
+        const date = await raspuns.json();
+
+        if (date.succes) {
+        arataNotificare("🚀 " + date.mesaj);
+        if (modCurentUser === 'login') {
+        utilizatorLogat = date.user;
+        localStorage.setItem('orion_user_session', JSON.stringify(date.user));
+        actualizeazaInterfataUtilizator();
+        toggleUserMeniu();
+        } else {
+        schimbaModUser('login');
+        }
+        // Resetăm câmpurile
+        document.getElementById('auth-username').value = "";
+        document.getElementById('auth-password').value = "";
+        document.getElementById('auth-adresa').value = "";
+        } else {
+        arataNotificare("❌ " + date.mesaj, true);
+        }
+        } catch (e) {
+        arataNotificare("❌ Problemă de conexiune cu serverul.", true);
+        }
+        }
+
+        function deconectareUtilizator() {
+        utilizatorLogat = null;
+        localStorage.removeItem('orion_user_session');
+        actualizeazaInterfataUtilizator();
+        arataNotificare("Te-ai deconectat cu succes!");
         }
 
         async function aduProdusele() {
@@ -478,16 +694,8 @@
         </div>
         `;
         });
-
-        if(localStorage.getItem('orion_user')) {
-        document.getElementById('username').value = localStorage.getItem('orion_user');
-        }
-        if(localStorage.getItem('orion_adresa')) {
-        document.getElementById('adresa').value = localStorage.getItem('orion_adresa');
-        }
-
         } catch (e) {
-        document.getElementById('lista-produse').innerHTML = "❌ Eroare la conectarea cu serverul.";
+        document.getElementById('lista-produse').innerHTML = "❌ Eroare la incarcarea produselor.";
         }
         }
 
@@ -530,21 +738,16 @@
         }
 
         async function trimiteComandaLaServer() {
+        if (!utilizatorLogat) {
+        arataNotificare("⚠️ Trebuie să te conectezi (Sign In) pentru a trimite comanda!", true);
+        toggleUserMeniu();
+        return;
+        }
+
         if (cos.length === 0) {
         arataNotificare("⚠️ Adaugă produse în coș mai întâi!", true);
         return;
         }
-
-        const userInscris = document.getElementById('username').value.trim();
-        const adresaInscrisa = document.getElementById('adresa').value.trim();
-
-        if (!userInscris || !adresaInscrisa) {
-        arataNotificare("⚠️ Te rugăm să pui Numele și Adresa pentru livrare!", true);
-        return;
-        }
-
-        localStorage.setItem('orion_user', userInscris);
-        localStorage.setItem('orion_adresa', adresaInscrisa);
 
         const totalPret = cos.reduce((suma, p) => suma + p.pret, 0);
 
@@ -555,8 +758,8 @@
         body: JSON.stringify({
         produse: cos,
         total: totalPret,
-        utilizator: userInscris,
-        adresa: adresaInscrisa
+        utilizator: utilizatorLogat.username,
+        adresa: utilizatorLogat.adresa
         })
         });
 
@@ -576,7 +779,10 @@
         }
         }
 
-        window.addEventListener('DOMContentLoaded', aduProdusele);
+        window.addEventListener('DOMContentLoaded', () => {
+        aduProdusele();
+        verificaStareConectare();
+        });
     </script>
 </body>
 </html>
