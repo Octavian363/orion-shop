@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orion Shop</title>
     <style>
+        /* 🛠️ RESET GLOBAL & BOX MODEL FIX */
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             background-color: #0f0f1a;
@@ -22,7 +27,7 @@
             border-bottom: 3px solid #3498db;
         }
 
-        /* 📜 SCROLL BAR-UL CEL ȘMECHER (ALBASTRU) */
+        /* 📜 SCROLL BAR-UL CELEBRU (ALBASTRU) */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -200,7 +205,7 @@
             }
 
             .grup-input input {
-                width: 93%;
+                width: 100%;
                 background: #111125;
                 border: 1px solid #2d2d4f;
                 padding: 10px;
@@ -547,17 +552,17 @@
     </div>
 
     <div class="container">
-        <div id="lista-produse" class="lista-produse">🔄 Se încarcă catalogul spatial...</div>
+        <div id="lista-produse" class="lista-produse">🔄 Se încarcă catalogul spațial...</div>
     </div>
 
     <script>
-        // 🚀 ADRESA SERVERULUI TĂU DE PE RAILWAY (Pune link-ul tău unic în loc de cel de mai jos!)
-        const BACKEND_URL = "https://magazin-backend-production.up.railway.app";
+        // Adresa URL a backend-ului tău de pe Railway
+        const BACKEND_URL = "https://orion-shop-production.up.railway.app";
 
         let cos = [];
         let warmeProduse = [];
-        let modCurentUser = 'login'; // 'login' sau 'register'
-        let utilizatorLogat = null; // Stochează datele când userul e conectat
+        let modCurentUser = 'login';
+        let utilizatorLogat = null;
 
         function toggleCos() {
         document.getElementById('cos-panou').classList.toggle('deschis');
@@ -570,6 +575,7 @@
         }
 
         function schimbaModUser(mod) {
+        document.getElementById('user-panou').scrollTop = 0;
         modCurentUser = mod;
         const btnLogin = document.getElementById('btn-mod-login');
         const btnRegister = document.getElementById('btn-mod-register');
@@ -597,7 +603,6 @@
         setTimeout(() => { el.classList.remove('afisat'); }, 4000);
         }
 
-        // Verifică starea conectării la pornirea paginii
         function verificaStareConectare() {
         const stocat = localStorage.getItem('orion_user_session');
         if (stocat) {
@@ -640,13 +645,13 @@
         }
 
         const ruta = modCurentUser === 'login' ? '/api/login' : '/api/register';
-        const dateTrise = modCurentUser === 'login' ? { username, password } : { username, password, adresa };
+        const dateTrimise = modCurentUser === 'login' ? { username, password } : { username, password, adresa };
 
         try {
         const raspuns = await fetch(BACKEND_URL + ruta, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dateTrise)
+        body: JSON.stringify(dateTrimise)
         });
         const date = await raspuns.json();
 
@@ -660,7 +665,7 @@
         } else {
         schimbaModUser('login');
         }
-        // Resetăm câmpurile
+        // Resetare câmpuri input
         document.getElementById('auth-username').value = "";
         document.getElementById('auth-password').value = "";
         document.getElementById('auth-adresa').value = "";
@@ -698,7 +703,7 @@
         `;
         });
         } catch (e) {
-        document.getElementById('lista-produse').innerHTML = "❌ Eroare la incarcarea produselor.";
+        document.getElementById('lista-produse').innerHTML = "❌ Eroare la încărcarea produselor.";
         }
         }
 
@@ -776,7 +781,6 @@
         } else {
         arataNotificare("❌ " + rezultat.mesaj, true);
         }
-
         } catch (error) {
         arataNotificare("❌ Serverul nu a răspuns la comandă.", true);
         }
