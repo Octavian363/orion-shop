@@ -27,7 +27,7 @@
             border-bottom: 3px solid #3498db;
         }
 
-        /* SCROLL BAR ALBASTRU */
+        /* BLUE SCROLL BAR */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -45,7 +45,7 @@
                 background: #0083b0;
             }
 
-        /* BUTOANELE DIN ANTET */
+        /* HEADER BUTTONS */
         .antet-butoane {
             position: absolute;
             left: 20px;
@@ -90,7 +90,7 @@
             font-weight: 900;
         }
 
-        /* PANOURILE GLISANTE (COȘ & CONT) */
+        /* SIDE PANELS (CART & ACCOUNT) */
         .panou-lateral {
             position: fixed;
             top: 0;
@@ -149,7 +149,7 @@
                 transform: scale(1.05);
             }
 
-        /* BUTOANE SCHIMBARE MOD (SIGN IN / SIGN UP) */
+        /* SIGN IN / SIGN UP MODE SWITCHER */
         .comutator-mod {
             display: flex;
             gap: 10px;
@@ -176,7 +176,7 @@
                     color: white;
                 }
 
-        /* FORMULARE STYLE */
+        /* ORION FORM STYLES */
         .formular-orion {
             background: #1e1e38;
             padding: 15px;
@@ -258,7 +258,7 @@
             width: 100%;
         }
 
-        /* BUTONUL MARE: FINALIZEAZĂ COMANDA */
+        /* FINALIZE ORDER MAIN BUTTON */
         .buton-plata-sus {
             background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
             color: white;
@@ -328,7 +328,7 @@
                 transform: scale(1.2);
             }
 
-        /* CATALOG PRODUSE */
+        /* PRODUCT CATALOG */
         .container {
             max-width: 1200px;
             margin: 3rem auto;
@@ -409,7 +409,7 @@
                 transform: translateY(-2px);
             }
 
-        /* NOTIFICAREA DE SITE */
+        /* NOTIFICATION */
         .notificare {
             position: fixed;
             top: -100px;
@@ -440,7 +440,7 @@
                 border: 1px solid #ff6b81;
             }
 
-        /* RESPONSIVE MOBIL */
+        /* RESPONSIVE MOBILE */
         @media (max-width: 768px) {
             header {
                 padding: 5rem 1rem 1.5rem 1rem;
@@ -482,10 +482,10 @@
 
     <header>
         <div class="antet-butoane">
-            <button class="cos-buton" onclick="toggleCos()">
+            <button class="cos-buton" onclick="toggleCart()">
                 Cos <span id="cos-contor" class="cos-contor">0</span>
             </button>
-            <button class="user-buton" id="btn-meniu-user" onclick="toggleUserMeniu()">
+            <button class="user-buton" id="btn-meniu-user" onclick="toggleUserMenu()">
                 Contul meu
             </button>
         </div>
@@ -496,10 +496,10 @@
     <div id="cos-panou" class="panou-lateral">
         <div class="panou-antet">
             <h2>Cosul tau</h2>
-            <button class="inchide-panou" onclick="toggleCos()">X</button>
+            <button class="inchide-panou" onclick="toggleCart()">X</button>
         </div>
 
-        <button class="buton-plata-sus" onclick="trimiteComandaLaServer()">Finalizeaza Comanda</button>
+        <button class="buton-plata-sus" onclick="sendOrderToServer()">Finalizeaza Comanda</button>
 
         <div class="cos-total">
             <span>Total:</span>
@@ -514,13 +514,13 @@
     <div id="user-panou" class="panou-lateral">
         <div class="panou-antet">
             <h2 id="user-titlu-panou">Autentificare</h2>
-            <button class="inchide-panou" onclick="toggleUserMeniu()">X</button>
+            <button class="inchide-panou" onclick="toggleUserMenu()">X</button>
         </div>
 
         <div id="sectiune-vizitator">
             <div class="comutator-mod">
-                <button id="btn-mod-login" class="activ" onclick="schimbaModUser('login')">Sign In</button>
-                <button id="btn-mod-register" onclick="schimbaModUser('register')">Sign Up</button>
+                <button id="btn-mod-login" class="activ" onclick="switchUserMode('login')">Sign In</button>
+                <button id="btn-mod-register" onclick="switchUserMode('register')">Sign Up</button>
             </div>
 
             <div class="formular-orion">
@@ -537,7 +537,7 @@
                     <input type="text" id="auth-address" placeholder="Oras, Strada, Numar">
                 </div>
 
-                <button class="btn-actiune" id="btn-auth-trimite" onclick="executaAutentificare()">Sign In</button>
+                <button class="btn-actiune" id="btn-auth-trimite" onclick="executeAuthentication()">Sign In</button>
             </div>
         </div>
 
@@ -546,7 +546,7 @@
                 <h3 style="color: #2ecc71; margin-top: 0;">Cont Conectat</h3>
                 <p id="info-user-salut" style="font-size: 1.1rem; font-weight: bold;"></p>
                 <p id="info-user-adresa" style="color: #8a8aab; font-size: 0.9rem;"></p>
-                <button class="btn-deconectare" onclick="deconectareUtilizator()">Deconectare / Sign Out</button>
+                <button class="btn-deconectare" onclick="signOutUser()">Deconectare / Sign Out</button>
             </div>
         </div>
     </div>
@@ -556,147 +556,153 @@
     </div>
 
     <script>
-        const BACKEND_URL = "https://orionshopbackend-production.up.railway.app";
+        // Dacă serverul tău rulează pe portul 3001, pune aici: "http://localhost:3001"
+        const BACKEND_URL = "";
 
-        let cos = [];
-        let warmeProduse = [];
-        let modCurentUser = 'login';
-        let utilizatorLogat = null;
+        let cart = [];
+        let products = [];
+        let currentAuthMode = 'login';
+        let loggedInUser = null;
 
-        function toggleCos() {
+        function toggleCart() {
         document.getElementById('cos-panou').classList.toggle('deschis');
         document.getElementById('user-panou').classList.remove('deschis');
         }
 
-        function toggleUserMeniu() {
+        function toggleUserMenu() {
         document.getElementById('user-panou').classList.toggle('deschis');
         document.getElementById('cos-panou').classList.remove('deschis');
         }
 
-        function schimbaModUser(mod) {
+        function switchUserMode(mode) {
         document.getElementById('user-panou').scrollTop = 0;
-        modCurentUser = mod;
+        currentAuthMode = mode;
         const btnLogin = document.getElementById('btn-mod-login');
         const btnRegister = document.getElementById('btn-mod-register');
-        const grupAdresa = document.getElementById('grup-input-adresa');
-        const btnTrimite = document.getElementById('btn-auth-trimite');
+        const addressGroup = document.getElementById('grup-input-adresa');
+        const btnSubmit = document.getElementById('btn-auth-trimite');
 
-        if (mod === 'login') {
+        if (mode === 'login') {
         btnLogin.classList.add('activ');
         btnRegister.classList.remove('activ');
-        grupAdresa.style.display = 'none';
-        btnTrimite.innerText = 'Sign In';
+        addressGroup.style.display = 'none';
+        btnSubmit.innerText = 'Sign In';
         } else {
         btnRegister.classList.add('activ');
         btnLogin.classList.remove('activ');
-        grupAdresa.style.display = 'block';
-        btnTrimite.innerText = 'Sign Up (Creare Cont)';
+        addressGroup.style.display = 'block';
+        btnSubmit.innerText = 'Sign Up (Creare Cont)';
         }
         }
 
-        function arataNotificare(mesaj, esteEroare = false) {
+        function showNotification(message, isError = false) {
         const el = document.getElementById('zona-notificare');
-        el.innerText = mesaj;
-        if (esteEroare) el.classList.add('eroare'); else el.classList.remove('eroare');
+        el.innerText = message;
+        if (isError) el.classList.add('eroare'); else el.classList.remove('eroare');
         el.classList.add('afisat');
         setTimeout(() => { el.classList.remove('afisat'); }, 4000);
         }
 
-        function verificaStareConectare() {
-        const stocat = localStorage.getItem('orion_user_session');
-        if (stocat) {
-        utilizatorLogat = JSON.parse(stocat);
-        actualizeazaInterfataUtilizator();
+        function checkLoginState() {
+        const stored = localStorage.getItem('orion_user_session');
+        if (stored) {
+        loggedInUser = JSON.parse(stored);
+        updateUserInterface();
         }
         }
 
-        function actualizeazaInterfataUtilizator() {
-        const secVizitator = document.getElementById('sectiune-vizitator');
-        const secConectat = document.getElementById('sectiune-conectat');
-        const btnMeniu = document.getElementById('btn-meniu-user');
+        function updateUserInterface() {
+        const secVisitor = document.getElementById('sectiune-vizitator');
+        const secConnected = document.getElementById('sectiune-conectat');
+        const btnMenu = document.getElementById('btn-meniu-user');
 
-        if (utilizatorLogat) {
-        secVizitator.style.display = 'none';
-        secConectat.style.display = 'block';
-        btnMeniu.innerText = `${utilizatorLogat.username}`;
-        document.getElementById('info-user-salut').innerText = `Salut, ${utilizatorLogat.username}!`;
-        document.getElementById('info-user-adresa').innerText = `Adresa: ${utilizatorLogat.address}`;
+        if (loggedInUser) {
+        secVisitor.style.display = 'none';
+        secConnected.style.display = 'block';
+        btnMenu.innerText = `${loggedInUser.username}`;
+        document.getElementById('info-user-salut').innerText = `Salut, ${loggedInUser.username}!`;
+        document.getElementById('info-user-adresa').innerText = `Adresa: ${loggedInUser.address}`;
         } else {
-        secVizitator.style.display = 'block';
-        secConectat.style.display = 'none';
-        btnMeniu.innerText = 'Contul meu';
+        secVisitor.style.display = 'block';
+        secConnected.style.display = 'none';
+        btnMenu.innerText = 'Contul meu';
         }
         }
 
-        async function executaAutentificare() {
+        async function executeAuthentication() {
         const username = document.getElementById('auth-username').value.trim();
         const password = document.getElementById('auth-password').value.trim();
         const address = document.getElementById('auth-address').value.trim();
 
         if (!username || !password) {
-        arataNotificare("Introdu numele de utilizator si parola!", true);
+        showNotification("Introdu numele de utilizator si parola!", true);
         return;
         }
 
-        if (modCurentUser === 'register' && !address) {
-        arataNotificare("Te rugam sa adaugi o adresa de livrare!", true);
+        if (currentAuthMode === 'register' && !address) {
+        showNotification("Te rugam sa adaugi o adresa de livrare!", true);
         return;
         }
 
-        const ruta = modCurentUser === 'login' ? '/api/login' : '/api/register';
-        const dateTrimise = modCurentUser === 'login' ? { username, password } : { username, password, address };
+        const route = currentAuthMode === 'login' ? '/api/login' : '/api/register';
+        const dataToSend = currentAuthMode === 'login' ? { username, password } : { username, password, address };
 
         try {
-        const raspuns = await fetch(BACKEND_URL + ruta, {
+        const response = await fetch(BACKEND_URL + route, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dateTrimise)
+        body: JSON.stringify(dataToSend)
         });
-        const date = await raspuns.json();
+        const data = await response.json();
 
-        if (date.success) {
-        arataNotificare(date.message);
-        if (modCurentUser === 'login') {
-        utilizatorLogat = date.user;
-        localStorage.setItem('orion_user_session', JSON.stringify(date.user));
-        actualizeazaInterfataUtilizator();
-        toggleUserMeniu();
+        if (data.success) {
+        showNotification(data.message);
+        if (currentAuthMode === 'login') {
+        loggedInUser = data.user;
+        localStorage.setItem('orion_user_session', JSON.stringify(data.user));
+        updateUserInterface();
+        toggleUserMenu();
         } else {
-        schimbaModUser('login');
+        switchUserMode('login');
         }
         document.getElementById('auth-username').value = "";
         document.getElementById('auth-password').value = "";
         document.getElementById('auth-address').value = "";
         } else {
-        arataNotificare(date.message, true);
+        showNotification(data.message, true);
         }
         } catch (e) {
-        arataNotificare("Problema de conexiune cu serverul.", true);
+        showNotification("Problema de conexiune cu serverul.", true);
         }
         }
 
-        function deconectareUtilizator() {
-        utilizatorLogat = null;
+        function signOutUser() {
+        loggedInUser = null;
         localStorage.removeItem('orion_user_session');
-        actualizeazaInterfataUtilizator();
-        arataNotificare("Te-ai deconectat cu succes!");
+        updateUserInterface();
+        showNotification("Te-ai deconectat cu succes!");
         }
 
-        async function aduProdusele() {
+        async function fetchProducts() {
         try {
-        const raspuns = await fetch(BACKEND_URL + "/api/products");
-        warmeProduse = await raspuns.json();
+        const response = await fetch(BACKEND_URL + "/api/produse");
+        products = await response.json();
         const container = document.getElementById('lista-produse');
         container.innerHTML = "";
 
-        warmeProduse.forEach(p => {
+        products.forEach(p => {
+        const productName = p.name || p.nume;
+        const productDescription = p.description || p.descriere || "";
+        const productPrice = p.price !== undefined ? p.price : p.pret;
+        const productImage = p.image || p.imagine || "https://via.placeholder.com/200";
+
         container.innerHTML += `
         <div class="card">
-        <img src="${p.image}" class="produs-img" alt="${p.name}">
-        <h3>${p.name}</h3>
-        <p>${p.description}</p>
-        <div class="pret">${p.price.toFixed(2)} RON</div>
-        <button class="btn-cumpara" onclick="adaugaInCos(${p.id})">Adauga in cos</button>
+        <img src="${productImage}" class="produs-img" alt="${productName}">
+        <h3>${productName}</h3>
+        <p>${productDescription}</p>
+        <div class="pret">${Number(productPrice).toFixed(2)} RON</div>
+        <button class="btn-cumpara" onclick="addToCart(${p.id})">Adauga in cos</button>
         </div>
         `;
         });
@@ -705,88 +711,98 @@
         }
         }
 
-        function adaugaInCos(id) {
-        const produs = warmeProduse.find(p => p.id === id);
-        if (produs) {
-        cos.push(produs);
-        actualizeazaGraficCos();
+        function addToCart(id) {
+        const product = products.find(p => p.id === id);
+        if (product) {
+        cart.push(product);
+        updateCartUI();
+        showNotification("Produs adaugat in cos!");
         }
         }
 
-        function stergeDinCos(index) {
-        cos.splice(index, 1);
-        actualizeazaGraficCos();
+        function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCartUI();
         }
 
-        function actualizeazaGraficCos() {
-        document.getElementById('cos-contor').innerText = cos.length;
-        const containerElemente = document.getElementById('cos-elemente');
+        function updateCartUI() {
+        document.getElementById('cos-contor').innerText = cart.length;
+        const elementsContainer = document.getElementById('cos-elemente');
 
-        if (cos.length === 0) {
-        containerElemente.innerHTML = '<p style="color: #6a6a8a; text-align: center;">Cosul este gol.</p>';
+        if (cart.length === 0) {
+        elementsContainer.innerHTML = '<p style="color: #6a6a8a; text-align: center;">Cosul este gol.</p>';
         } else {
-        containerElemente.innerHTML = "";
-        cos.forEach((p, index) => {
-        containerElemente.innerHTML += `
+        elementsContainer.innerHTML = "";
+        cart.forEach((p, index) => {
+        const productName = p.name || p.nume;
+        const productPrice = p.price !== undefined ? p.price : p.pret;
+
+        elementsContainer.innerHTML += `
         <div class="produs-cos">
         <div>
-        <strong>${p.name}</strong><br>
-        <span style="color: #2ecc71;">${p.price.toFixed(2)} RON</span>
+        <strong>${productName}</strong><br>
+        <span style="color: #2ecc71;">${Number(productPrice).toFixed(2)} RON</span>
         </div>
-        <button class="sterge-produs" onclick="stergeDinCos(${index})">Sterge</button>
+        <button class="sterge-produs" onclick="removeFromCart(${index})">Sterge</button>
         </div>
         `;
         });
         }
 
-        const total = cos.reduce((suma, p) => suma + p.price, 0);
+        const total = cart.reduce((sum, p) => {
+        const productPrice = p.price !== undefined ? p.price : p.pret;
+        return sum + Number(productPrice);
+        }, 0);
         document.getElementById('cos-total-pret').innerText = total.toFixed(2) + " RON";
         }
 
-        async function trimiteComandaLaServer() {
-        if (!utilizatorLogat) {
-        arataNotificare("Trebuie sa te conectezi (Sign In) pentru a trimite comanda!", true);
-        toggleUserMeniu();
+        async function sendOrderToServer() {
+        if (!loggedInUser) {
+        showNotification("Trebuie sa te conectezi (Sign In) pentru a trimite comanda!", true);
+        toggleUserMenu();
         return;
         }
 
-        if (cos.length === 0) {
-        arataNotificare("Adauga produse in cos mai intai!", true);
+        if (cart.length === 0) {
+        showNotification("Adauga produse in cos mai intai!", true);
         return;
         }
 
-        const totalPret = cos.reduce((suma, p) => suma + p.price, 0);
+        const totalAmount = cart.reduce((sum, p) => {
+        const productPrice = p.price !== undefined ? p.price : p.pret;
+        return sum + Number(productPrice);
+        }, 0);
 
         try {
-        const response = await fetch(BACKEND_URL + '/api/order', {
+        const response = await fetch(BACKEND_URL + '/api/comanda', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-        products: cos,
-        total: totalPret,
-        user: utilizatorLogat.username,
-        address: utilizatorLogat.address
+        products: cart,
+        total: totalAmount,
+        user: loggedInUser.username,
+        address: loggedInUser.address
         })
-        });
+        }); // Corectat: Litera rătăcită 'a' a fost ștearsă de aici.
 
-        const rezultat = await response.json();
+        const result = await response.json();
 
-        if(rezultat.success) {
-        arataNotificare(rezultat.message, false);
-        cos = [];
-        actualizeazaGraficCos();
-        toggleCos();
+        if (result.success || result.succes) {
+        showNotification(result.message || result.mesaj, false);
+        cart = [];
+        updateCartUI();
+        toggleCart();
         } else {
-        arataNotificare(rezultat.message, true);
+        showNotification(result.message || result.mesaj, true);
         }
         } catch (error) {
-        arataNotificare("Serverul nu a raspuns la comanda.", true);
+        showNotification("Serverul nu a raspuns la comanda.", true);
         }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-        aduProdusele();
-        verificaStareConectare();
+        fetchProducts();
+        checkLoginState();
         });
     </script>
 </body>

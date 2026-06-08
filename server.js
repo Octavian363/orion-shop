@@ -4,7 +4,8 @@ const cors = require('cors');
 const twilio = require('twilio');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+// Schimbat pe 3001 ca să se potrivească cu ce caută browserul în frontend
+const PORT = process.env.PORT || 3001; 
 
 // Initialize Twilio Client
 const twilioClient = twilio(
@@ -15,23 +16,37 @@ const twilioClient = twilio(
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public')); // Serves HTML, CSS, and JS from the 'public' folder
+app.use(express.static('public')); // Servește HTML, CSS și Imaginile din folderul 'public'
 
-// List of products available in the shop
+// Lista de produse actualizată cu produsele tale, Octavian!
 const products = [
     {
         id: 1,
-        name: "Roblox Figurine",
-        description: "A rare figurine from the Roblox universe for your collection.",
-        price: 49.99,
-        image: "https://images.rbxcdn.com/cecebe2c77d4c947c6e736df2eb4b74a.png"
+        name: "Uno Joc de Cărți",
+        description: "Cel mai distractiv joc de cărți pentru tine și prietenii tăi.",
+        price: 29.99,
+        image: "/uno.webp" // Va căuta fișierul public/uno.webp
     },
     {
         id: 2,
-        name: "RGB Gaming Keyboard",
-        description: "Fast mechanical keyboard with spectacular lighting setup.",
-        price: 189.00,
-        image: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=500"
+        name: "Stylus Pen Professional",
+        description: "Stylus de înaltă precizie pentru tabletă sau telefon.",
+        price: 85.00,
+        image: "/stylus.webp" // Va căuta fișierul public/stylus.webp
+    },
+    {
+        id: 3,
+        name: "Orion Emblem",
+        description: "Produsul oficial cu branding-ul Orion Shop.",
+        price: 15.00,
+        image: "/orion.png" // Va căuta fișierul public/orion.png
+    },
+    {
+        id: 4,
+        name: "Fallen Guardian Figurine",
+        description: "Ediție limitată de colecție cu Fallen Guardian.",
+        price: 149.99,
+        image: "/Fallen Guardian.png" // Atenție la litere mari și spațiu, trebuie să fie EXACT ca în folder
     }
 ];
 
@@ -84,8 +99,8 @@ app.post('/api/comanda', (req, res) => {
         return res.status(400).json({ success: false, message: "Coșul tău este gol!" });
     }
 
-    const productList = orderProducts.map(p => p.name).join(', ');
-    const smsBody = `Orion Shop: New order from ${user}! Products: [${productList}]. Total: ${total.toFixed(2)} RON. Address: ${address}.`;
+    const productList = orderProducts.map(p => p.name || p.nume).join(', ');
+    const smsBody = `Orion Shop: Comandă nouă de la ${user}! Produse: [${productList}]. Total: ${total.toFixed(2)} RON. Adresă: ${address}.`;
 
     // Send SMS via Twilio directly to your verified number
     twilioClient.messages.create({
@@ -94,7 +109,7 @@ app.post('/api/comanda', (req, res) => {
         to: '+40720023423'
     })
     .then(message => {
-        console.log(`SMS sent successfully! SID: ${message.sid}`);
+        console.log(`SMS trimis cu succes! SID: ${message.sid}`);
         res.json({ success: true, message: "Comanda a fost trimisă! Administratorul a fost notificat prin SMS." });
     })
     .catch(error => {
