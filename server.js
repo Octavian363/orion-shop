@@ -38,8 +38,8 @@ const products = [
 // Hardcoded users array for session simulation
 const users = [];
 
-// Route to get all products
-app.get('/api/products', (req, res) => {
+// Route to get all products (Potrivito pentru index.html)
+app.get('/api/produse', (req, res) => {
     res.json(products);
 });
 
@@ -76,8 +76,8 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// Route to handle new orders and send Twilio SMS
-app.post('/api/order', (req, res) => {
+// Route to handle new orders and send Twilio SMS (Potrivito pentru index.html)
+app.post('/api/comanda', (req, res) => {
     const { products: orderProducts, total, user, address } = req.body;
 
     if (!orderProducts || orderProducts.length === 0) {
