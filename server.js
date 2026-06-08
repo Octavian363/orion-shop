@@ -48,16 +48,16 @@ app.post('/api/register', (req, res) => {
     const { username, password, address } = req.body;
     
     if (!username || !password || !address) {
-        return res.status(400).json({ success: false, message: "Missing fields" });
+        return res.status(400).json({ success: false, message: "Te rugăm să completezi toate câmpurile!" });
     }
 
     const userExists = users.find(u => u.username === username);
     if (userExists) {
-        return res.status(400).json({ success: false, message: "Username already taken" });
+        return res.status(400).json({ success: false, message: "Acest nume de utilizator este deja folosit!" });
     }
 
     users.push({ username, password, address });
-    res.json({ success: true, message: "Account created successfully!" });
+    res.json({ success: true, message: "Contul a fost creat cu succes!" });
 });
 
 // Route for user login
@@ -66,12 +66,12 @@ app.post('/api/login', (req, res) => {
     
     const user = users.find(u => u.username === username && u.password === password);
     if (!user) {
-        return res.status(400).json({ success: false, message: "Invalid username or password" });
+        return res.status(400).json({ success: false, message: "Nume de utilizator sau parolă incorectă!" });
     }
 
     res.json({
         success: true,
-        message: "Welcome back!",
+        message: "Bine ai revenit pe Orion Shop!",
         user: { username: user.username, address: user.address }
     });
 });
@@ -81,7 +81,7 @@ app.post('/api/comanda', (req, res) => {
     const { products: orderProducts, total, user, address } = req.body;
 
     if (!orderProducts || orderProducts.length === 0) {
-        return res.status(400).json({ success: false, message: "Cart is empty" });
+        return res.status(400).json({ success: false, message: "Coșul tău este gol!" });
     }
 
     const productList = orderProducts.map(p => p.name).join(', ');
@@ -95,11 +95,11 @@ app.post('/api/comanda', (req, res) => {
     })
     .then(message => {
         console.log(`SMS sent successfully! SID: ${message.sid}`);
-        res.json({ success: true, message: "Order placed successfully! Notification sent to admin." });
+        res.json({ success: true, message: "Comanda a fost trimisă! Administratorul a fost notificat prin SMS." });
     })
     .catch(error => {
         console.error("Twilio Error:", error);
-        res.status(500).json({ success: false, message: "Failed to send SMS notification, check Twilio setup." });
+        res.status(500).json({ success: false, message: "Eroare la trimiterea SMS-ului. Verifică setările Twilio." });
     });
 });
 
