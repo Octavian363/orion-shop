@@ -4,10 +4,10 @@ const cors = require('cors');
 const twilio = require('twilio');
 
 const app = express();
-// Railway va folosi process.env.PORT (ex: 8080), iar local se va folosi 3001
+// Railway va folosi automat portul 8080 (sau ce îi alocă cloud-ul), iar local va fi 3001
 const PORT = process.env.PORT || 3001; 
 
-// Inițializare Client Twilio folosind variabilele de mediu
+// Inițializare Client Twilio
 const twilioClient = twilio(
     process.env.TWILIO_ACCOUNT_SID,
     process.env.TWILIO_AUTH_TOKEN
@@ -17,10 +17,10 @@ const twilioClient = twilio(
 app.use(cors());
 app.use(express.json());
 
-// IMPORTANT: Servește fișierele web (index.html, imagini) din folderul 'public'
+// Servește fișierele web (index.html, imagini) din folderul 'public'
 app.use(express.static('public')); 
 
-// Lista oficială de produse Orion Shop (cu rutele corecte către imagini)
+// Lista oficială de produse Orion Shop
 const products = [
     {
         id: 1,
@@ -52,40 +52,33 @@ const products = [
     }
 ];
 
-// Vector pentru simularea utilizatorilor în memorie (se resetează la restartul serverului)
+// Vector pentru utilizatori (în memorie)
 const users = [];
 
-// Ruta API pentru a trimite produsele către frontend
+// Rute API
 app.get('/api/produse', (req, res) => {
     res.json(products);
 });
 
-// Ruta API pentru înregistrare utilizator
 app.post('/api/register', (req, res) => {
     const { username, password, address } = req.body;
-    
     if (!username || !password || !address) {
         return res.status(400).json({ success: false, message: "Te rugăm să completezi toate câmpurile!" });
     }
-
     const userExists = users.find(u => u.username === username);
     if (userExists) {
         return res.status(400).json({ success: false, message: "Acest nume de utilizator este deja folosit!" });
     }
-
     users.push({ username, password, address });
     res.json({ success: true, message: "Contul a fost creat cu succes!" });
 });
 
-// Ruta API pentru autentificare utilizator
 app.post('/api/login', (req, res) => {
     const { username, password } = req.body;
-    
     const user = users.find(u => u.username === username && u.password === password);
     if (!user) {
         return res.status(400).json({ success: false, message: "Nume de utilizator sau parolă incorectă!" });
     }
-
     res.json({
         success: true,
         message: "Bine ai revenit pe Orion Shop!",
@@ -93,7 +86,7 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// Ruta API pentru procesarea comenzii și trimiterea SMS-ului direct prin Twilio
+// Ruta pentru comandă cu numărul tău personal verificat și corectat
 app.post('/api/comanda', (req, res) => {
     const { products: orderProducts, total, user, address } = req.body;
 
@@ -101,15 +94,14 @@ app.post('/api/comanda', (req, res) => {
         return res.status(400).json({ success: false, message: "Coșul tău este gol!" });
     }
 
-    // Construim lista de produse pentru textul din SMS
     const productList = orderProducts.map(p => p.name || p.nume).join(', ');
     const smsBody = `Orion Shop: Comandă nouă de la ${user}! Produse: [${productList}]. Total: ${total.toFixed(2)} RON. Adresă: ${address}.`;
 
     // Trimitere directă de pe numărul tău de SUA către numărul tău personal din România
     twilioClient.messages.create({
         body: smsBody,
-        from: '+12175823125',  // Numărul tău Twilio achiziționat
-        to: '+407200234423'    // Numărul tău de telefon din 12 cifre
+        from: '+12175823125',  // Numărul tău Twilio din SUA
+        to: '+40720023423'     // Numărul tău personal (12 caractere)
     })
     .then(message => {
         console.log(`SMS trimis cu succes! SID: ${message.sid}`);
@@ -121,7 +113,6 @@ app.post('/api/comanda', (req, res) => {
     });
 });
 
-// Pornirea serverului pe portul detectat automat
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
