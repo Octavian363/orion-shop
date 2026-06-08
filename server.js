@@ -38,7 +38,7 @@ const products = [
 // Hardcoded users array for session simulation
 const users = [];
 
-// Route to get all products (Potrivito pentru index.html)
+// Route to get all products
 app.get('/api/produse', (req, res) => {
     res.json(products);
 });
@@ -76,7 +76,7 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// Route to handle new orders and send Twilio SMS (Potrivito pentru index.html)
+// Route to handle new orders and send Twilio SMS
 app.post('/api/comanda', (req, res) => {
     const { products: orderProducts, total, user, address } = req.body;
 
@@ -87,7 +87,7 @@ app.post('/api/comanda', (req, res) => {
     const productList = orderProducts.map(p => p.name).join(', ');
     const smsBody = `Orion Shop: New order from ${user}! Products: [${productList}]. Total: ${total.toFixed(2)} RON. Address: ${address}.`;
 
-    // Send SMS via Twilio using Messaging Service SID
+    // Send SMS via Twilio directly to your verified number
     twilioClient.messages.create({
         body: smsBody,
         messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
