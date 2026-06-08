@@ -4,7 +4,7 @@ const cors = require('cors');
 const twilio = require('twilio');
 
 const app = express();
-// Railway va folosi automat portul 8080 (sau ce îi alocă cloud-ul), iar local va fi 3001
+// Railway va folosi automat portul alocat în cloud, iar local va fi 3001
 const PORT = process.env.PORT || 3001; 
 
 // Inițializare Client Twilio
@@ -17,37 +17,37 @@ const twilioClient = twilio(
 app.use(cors());
 app.use(express.json());
 
-// Servește fișierele web (index.html, imagini) din folderul 'public'
+// Servește fișierele web din folderul 'public'
 app.use(express.static('public')); 
 
-// Lista oficială de produse Orion Shop
+// Lista oficială de produse Orion Shop - CU PREȚURILE NOI MODIFICATE
 const products = [
     {
         id: 1,
         name: "Uno Joc de Cărți",
         description: "Cel mai distractiv joc de cărți pentru tine și prietenii tăi.",
-        price: 29.99,
+        price: 45.00, // Modificat de la 29.99
         image: "/uno.webp"
     },
     {
         id: 2,
         name: "Stylus Pen Professional",
         description: "Stylus de înaltă precizie pentru tabletă sau telefon.",
-        price: 85.00,
+        price: 1.50, // Modificat de la 85.00
         image: "/stylus.webp"
     },
     {
         id: 3,
         name: "Orion Emblem",
         description: "Produsul oficial cu branding-ul Orion Shop.",
-        price: 15.00,
+        price: 60.00, // Modificat de la 15.00
         image: "/orion.png"
     },
     {
         id: 4,
         name: "Fallen Guardian Figurine",
         description: "Ediție limitată de colecție cu Fallen Guardian.",
-        price: 149.99,
+        price: 10.00, // Modificat de la 149.99
         image: "/Fallen Guardian.png"
     }
 ];
@@ -86,7 +86,7 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// Ruta pentru comandă cu numărul tău personal verificat și corectat
+// Ruta pentru comandă
 app.post('/api/comanda', (req, res) => {
     const { products: orderProducts, total, user, address } = req.body;
 
@@ -97,11 +97,11 @@ app.post('/api/comanda', (req, res) => {
     const productList = orderProducts.map(p => p.name || p.nume).join(', ');
     const smsBody = `Orion Shop: Comandă nouă de la ${user}! Produse: [${productList}]. Total: ${total.toFixed(2)} RON. Adresă: ${address}.`;
 
-    // Trimitere directă de pe numărul tău de SUA către numărul tău personal din România
+    // Trimitere directă către numărul tău personal verificat
     twilioClient.messages.create({
         body: smsBody,
-        from: '+12175823125',  // Numărul tău Twilio din SUA
-        to: '+40720023423'     // Numărul tău personal (12 caractere)
+        from: '+12175823125',
+        to: '+40720023423'
     })
     .then(message => {
         console.log(`SMS trimis cu succes! SID: ${message.sid}`);
