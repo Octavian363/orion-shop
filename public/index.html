@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orion Shop</title>
+
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" href="style.css">
+
     <style>
         /* RESET GLOBAL & BOX MODEL FIX */
         * {
@@ -478,28 +483,28 @@
 </head>
 <body>
 
-    <div id="zona-notificare" class="notificare">Actiune reusita!</div>
+    <div id="zona-notificare" class="notificare">Acțiune reușită!</div>
 
     <header>
         <div class="antet-butoane">
             <button class="cos-buton" onclick="toggleCart()">
-                Cos <span id="cos-contor" class="cos-contor">0</span>
+                Coș <span id="cos-contor" class="cos-contor">0</span>
             </button>
             <button class="user-buton" id="btn-meniu-user" onclick="toggleUserMenu()">
                 Contul meu
             </button>
         </div>
         <h1>Orion Shop</h1>
-        <p style="color: #8a8aab; margin: 5px 0 0 0;">Magazinul Orion facut de Octavian</p>
+        <p style="color: #8a8aab; margin: 5px 0 0 0;">Magazinul Orion făcut de Octavian</p>
     </header>
 
     <div id="cos-panou" class="panou-lateral">
         <div class="panou-antet">
-            <h2>Cosul tau</h2>
+            <h2>Coșul tău</h2>
             <button class="inchide-panou" onclick="toggleCart()">X</button>
         </div>
 
-        <button class="buton-plata-sus" onclick="sendOrderToServer()">Finalizeaza Comanda</button>
+        <button class="buton-plata-sus" onclick="sendOrderToServer()">Finalizează Comanda</button>
 
         <div class="cos-total">
             <span>Total:</span>
@@ -507,7 +512,7 @@
         </div>
 
         <div id="cos-elemente" class="cos-elemente">
-            <p style="color: #6a6a8a; text-align: center;">Cosul este gol.</p>
+            <p style="color: #6a6a8a; text-align: center;">Coșul este gol.</p>
         </div>
     </div>
 
@@ -529,12 +534,12 @@
                     <input type="text" id="auth-username" placeholder="Ex: Octavian363">
                 </div>
                 <div class="grup-input">
-                    <label>Parola / Password</label>
+                    <label>Parolă / Password</label>
                     <input type="password" id="auth-password" placeholder="••••••••">
                 </div>
                 <div class="grup-input" id="grup-input-adresa" style="display: none;">
-                    <label>Adresa Completa Livrare</label>
-                    <input type="text" id="auth-address" placeholder="Oras, Strada, Numar">
+                    <label>Adresă Completă Livrare</label>
+                    <input type="text" id="auth-address" placeholder="Oraș, Stradă, Număr">
                 </div>
 
                 <button class="btn-actiune" id="btn-auth-trimite" onclick="executeAuthentication()">Sign In</button>
@@ -552,11 +557,10 @@
     </div>
 
     <div class="container">
-        <div id="lista-produse" class="lista-produse">Se incarca catalogul...</div>
+        <div id="lista-produse" class="lista-produse">Se încarcă catalogul...</div>
     </div>
 
     <script>
-        // Dacă serverul tău rulează pe portul 3001, pune aici: "http://localhost:3001"
         const BACKEND_URL = "";
 
         let cart = [];
@@ -621,7 +625,7 @@
         secConnected.style.display = 'block';
         btnMenu.innerText = `${loggedInUser.username}`;
         document.getElementById('info-user-salut').innerText = `Salut, ${loggedInUser.username}!`;
-        document.getElementById('info-user-adresa').innerText = `Adresa: ${loggedInUser.address}`;
+        document.getElementById('info-user-adresa').innerText = `Adresă: ${loggedInUser.address}`;
         } else {
         secVisitor.style.display = 'block';
         secConnected.style.display = 'none';
@@ -635,12 +639,12 @@
         const address = document.getElementById('auth-address').value.trim();
 
         if (!username || !password) {
-        showNotification("Introdu numele de utilizator si parola!", true);
+        showNotification("Introdu numele de utilizator și parola!", true);
         return;
         }
 
         if (currentAuthMode === 'register' && !address) {
-        showNotification("Te rugam sa adaugi o adresa de livrare!", true);
+        showNotification("Te rugăm să adaugi o adresă de livrare!", true);
         return;
         }
 
@@ -672,7 +676,7 @@
         showNotification(data.message, true);
         }
         } catch (e) {
-        showNotification("Problema de conexiune cu serverul.", true);
+        showNotification("Problemă de conexiune cu serverul.", true);
         }
         }
 
@@ -702,12 +706,12 @@
         <h3>${productName}</h3>
         <p>${productDescription}</p>
         <div class="pret">${Number(productPrice).toFixed(2)} RON</div>
-        <button class="btn-cumpara" onclick="addToCart(${p.id})">Adauga in cos</button>
+        <button class="btn-cumpara" onclick="addToCart(${p.id})">Adaugă în coș</button>
         </div>
         `;
         });
         } catch (e) {
-        document.getElementById('lista-produse').innerHTML = "Eroare la incarcarea produselor.";
+        document.getElementById('lista-produse').innerHTML = "Eroare la încărcarea produselor.";
         }
         }
 
@@ -716,7 +720,7 @@
         if (product) {
         cart.push(product);
         updateCartUI();
-        showNotification("Produs adaugat in cos!");
+        showNotification("Produs adăugat în coș!");
         }
         }
 
@@ -730,7 +734,7 @@
         const elementsContainer = document.getElementById('cos-elemente');
 
         if (cart.length === 0) {
-        elementsContainer.innerHTML = '<p style="color: #6a6a8a; text-align: center;">Cosul este gol.</p>';
+        elementsContainer.innerHTML = '<p style="color: #6a6a8a; text-align: center;">Coșul este gol.</p>';
         } else {
         elementsContainer.innerHTML = "";
         cart.forEach((p, index) => {
@@ -743,7 +747,7 @@
         <strong>${productName}</strong><br>
         <span style="color: #2ecc71;">${Number(productPrice).toFixed(2)} RON</span>
         </div>
-        <button class="sterge-produs" onclick="removeFromCart(${index})">Sterge</button>
+        <button class="sterge-produs" onclick="removeFromCart(${index})">Șterge</button>
         </div>
         `;
         });
@@ -758,13 +762,13 @@
 
         async function sendOrderToServer() {
         if (!loggedInUser) {
-        showNotification("Trebuie sa te conectezi (Sign In) pentru a trimite comanda!", true);
+        showNotification("Trebuie să te conectezi (Sign In) pentru a trimite comanda!", true);
         toggleUserMenu();
         return;
         }
 
         if (cart.length === 0) {
-        showNotification("Adauga produse in cos mai intai!", true);
+        showNotification("Adaugă produse în coș mai întâi!", true);
         return;
         }
 
@@ -783,7 +787,7 @@
         user: loggedInUser.username,
         address: loggedInUser.address
         })
-        }); // Corectat: Litera rătăcită 'a' a fost ștearsă de aici.
+        });
 
         const result = await response.json();
 
@@ -796,7 +800,7 @@
         showNotification(result.message || result.mesaj, true);
         }
         } catch (error) {
-        showNotification("Serverul nu a raspuns la comanda.", true);
+        showNotification("Serverul nu a răspuns la comandă.", true);
         }
         }
 
