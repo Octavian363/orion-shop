@@ -4,7 +4,6 @@ const cors = require('cors');
 const twilio = require('twilio');
 
 const app = express();
-// Railway va folosi automat portul alocat în cloud, iar local va fi 3001
 const PORT = process.env.PORT || 3001; 
 
 // Inițializare Client Twilio
@@ -16,50 +15,84 @@ const twilioClient = twilio(
 // Middleware
 app.use(cors());
 app.use(express.json());
-
-// Servește fișierele web din folderul 'public'
 app.use(express.static('public')); 
 
-// Lista oficială de produse Orion Shop - CU PREȚURILE NOI MODIFICATE
+// Lista oficială de produse Orion Shop
 const products = [
     {
         id: 1,
         name: "Uno Joc de Cărți",
         description: "Cel mai distractiv joc de cărți pentru tine și prietenii tăi.",
-        price: 45.00, // Modificat de la 29.99
+        price: 45.00,
         image: "/uno.webp"
     },
     {
         id: 2,
         name: "Stylus Pen Professional",
         description: "Stylus de înaltă precizie pentru tabletă sau telefon.",
-        price: 1.50, // Modificat de la 85.00
+        price: 1.50,
         image: "/stylus.webp"
     },
     {
         id: 3,
         name: "Orion Emblem",
         description: "Produsul oficial cu branding-ul Orion Shop.",
-        price: 60.00, // Modificat de la 15.00
+        price: 60.00,
         image: "/orion.png"
     },
     {
         id: 4,
         name: "Fallen Guardian Figurine",
         description: "Ediție limitată de colecție cu Fallen Guardian.",
-        price: 10.00, // Modificat de la 149.99
+        price: 10.00,
         image: "/Fallen Guardian.png"
     }
 ];
 
-// Vector pentru utilizatori (în memorie)
+// Baza de date în memorie pentru comentarii
+const comments = [
+    { id: 1, productId: 1, username: "Octavian363", rating: 5, text: "Un joc clasic super distractiv! Recomand cu drag." },
+    { id: 2, productId: 1, username: "Andrei_G", rating: 4, text: "Cărțile sunt de calitate, ne jucăm în fiecare seară." },
+    { id: 3, productId: 2, username: "Matei22", rating: 5, text: "La prețul ăsta de 1.50 lei e pomandă curată! Merge perfect pe tabletă." },
+    { id: 4, productId: 3, username: "OrionFan", rating: 5, text: "Logo-ul arată demențial pe site, abia așteptam emblema!" },
+    { id: 5, productId: 4, username: "RobloxPro", rating: 5, text: "Figurina cu Fallen Guardian arată super bine pe birou." }
+];
+
 const users = [];
 
-// Rute API
+// Rute API Produse
 app.get('/api/produse', (req, res) => {
     res.json(products);
 });
 
+// Rută pentru a lua comentariile unui anumit produs
+app.get('/api/comentarii/:productId', (req, res) => {
+    const productId = parseInt(req.params.productId);
+    const productComments = comments.filter(c => c.productId === productId);
+    res.json(productComments);
+});
+
+// Rută pentru a adăuga un comentariu nou
+app.post('/api/comentarii', (req, res) => {
+    const { productId, username, rating, text } = req.body;
+
+    if (!productId || !username || !rating || !text) {
+        return res.status(400).json({ success: false, message: "Toate câmpurile sunt obligatorii pentru recenzie!" });
+    }
+
+    const newComment = {
+        id: comments.length + 1,
+        productId: parseInt(productId),
+        username,
+        rating: parseInt(rating),
+        text
+    };
+
+    comments.push(newComment);
+    res.json({ success: true, message: "Recenzia ta a fost adăugată!", comment: newComment });
+});
+
+// Rute Autentificare
 app.post('/api/register', (req, res) => {
     const { username, password, address } = req.body;
     if (!username || !password || !address) {
@@ -97,7 +130,6 @@ app.post('/api/comanda', (req, res) => {
     const productList = orderProducts.map(p => p.name || p.nume).join(', ');
     const smsBody = `Orion Shop: Comandă nouă de la ${user}! Produse: [${productList}]. Total: ${total.toFixed(2)} RON. Adresă: ${address}.`;
 
-    // Trimitere directă către numărul tău personal verificat
     twilioClient.messages.create({
         body: smsBody,
         from: '+12175823125',

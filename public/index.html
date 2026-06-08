@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orion Shop</title>
-
     <link rel="icon" type="image/png" href="/favicon.png">
-
     <link rel="stylesheet" href="style.css">
 
     <style>
-        /* RESET GLOBAL & BOX MODEL FIX */
         * {
             box-sizing: border-box;
         }
@@ -32,7 +29,6 @@
             border-bottom: 3px solid #3498db;
         }
 
-        /* BLUE SCROLL BAR */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -46,11 +42,6 @@
             border-radius: 5px;
         }
 
-            ::-webkit-scrollbar-thumb:hover {
-                background: #0083b0;
-            }
-
-        /* HEADER BUTTONS */
         .antet-butoane {
             position: absolute;
             left: 20px;
@@ -72,30 +63,16 @@
             align-items: center;
             gap: 12px;
             box-shadow: 0 4px 15px rgba(0, 180, 219, 0.4);
-            font-size: 1rem;
-            width: auto;
-            transition: all 0.3s ease;
         }
-
-            .cos-buton:hover, .user-buton:hover {
-                transform: scale(1.05);
-                box-shadow: 0 6px 20px rgba(0, 180, 219, 0.6);
-            }
-
-            .cos-buton:active, .user-buton:active {
-                transform: scale(0.98);
-            }
 
         .cos-contor {
             background: white;
             color: #0083b0;
             padding: 3px 10px;
             border-radius: 50%;
-            font-size: 0.9rem;
             font-weight: 900;
         }
 
-        /* SIDE PANELS (CART & ACCOUNT) */
         .panou-lateral {
             position: fixed;
             top: 0;
@@ -103,7 +80,7 @@
             height: 100%;
             background: #16162a;
             box-shadow: 5px 0 25px rgba(0,0,0,0.5);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s ease;
             z-index: 1000;
             padding: 25px;
             display: flex;
@@ -144,17 +121,9 @@
             padding: 6px 12px;
             border-radius: 8px;
             cursor: pointer;
-            width: auto;
             font-weight: bold;
-            transition: all 0.2s;
         }
 
-            .inchide-panou:hover {
-                background: #ff6b81;
-                transform: scale(1.05);
-            }
-
-        /* SIGN IN / SIGN UP MODE SWITCHER */
         .comutator-mod {
             display: flex;
             gap: 10px;
@@ -172,34 +141,23 @@
                 padding: 8px;
                 cursor: pointer;
                 font-weight: bold;
-                border-radius: 6px;
-                transition: all 0.2s;
             }
 
                 .comutator-mod button.activ {
                     background: #00b4db;
                     color: white;
+                    border-radius: 6px;
                 }
 
-        /* ORION FORM STYLES */
         .formular-orion {
             background: #1e1e38;
             padding: 15px;
             border-radius: 12px;
-            margin-bottom: 15px;
             border: 1px solid #2d2d4f;
         }
 
-            .formular-orion h3 {
-                margin: 0 0 15px 0;
-                font-size: 1.1rem;
-                color: #00b4db;
-                text-transform: uppercase;
-            }
-
         .grup-input {
             margin-bottom: 12px;
-            text-align: left;
         }
 
             .grup-input label {
@@ -209,22 +167,14 @@
                 margin-bottom: 4px;
             }
 
-            .grup-input input {
+            .grup-input input, .grup-input textarea, .grup-input select {
                 width: 100%;
                 background: #111125;
                 border: 1px solid #2d2d4f;
                 padding: 10px;
                 border-radius: 8px;
                 color: white;
-                font-size: 0.9rem;
-                transition: all 0.3s;
             }
-
-                .grup-input input:focus {
-                    outline: none;
-                    border-color: #00b4db;
-                    box-shadow: 0 0 8px rgba(0, 180, 219, 0.4);
-                }
 
         .btn-actiune {
             background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
@@ -235,35 +185,8 @@
             cursor: pointer;
             font-weight: bold;
             width: 100%;
-            transition: all 0.2s;
         }
 
-            .btn-actiune:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(0, 180, 219, 0.3);
-            }
-
-        .info-status-conectat {
-            text-align: center;
-            padding: 20px 10px;
-            background: #1e1e38;
-            border-radius: 12px;
-            border: 1px solid #2d2d4f;
-        }
-
-        .btn-deconectare {
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 15px;
-            width: 100%;
-        }
-
-        /* FINALIZE ORDER MAIN BUTTON */
         .buton-plata-sus {
             background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
             color: white;
@@ -272,26 +195,9 @@
             border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 1.1rem;
             width: 100%;
-            margin-bottom: 15px;
-            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
-            transition: all 0.25s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
             border-bottom: 4px solid #1e7e43;
         }
-
-            .buton-plata-sus:hover {
-                background: linear-gradient(135deg, #2ed573 0%, #26af5f 100%);
-                box-shadow: 0 8px 22px rgba(46, 204, 113, 0.6);
-                transform: translateY(-2px);
-            }
-
-            .buton-plata-sus:active {
-                transform: translateY(2px);
-                border-bottom: 1px solid #1e7e43;
-            }
 
         .cos-total {
             font-size: 1.3rem;
@@ -300,7 +206,6 @@
             border-bottom: 2px solid #252542;
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
             color: #2ecc71;
         }
 
@@ -315,7 +220,6 @@
             align-items: center;
             padding: 12px 0;
             border-bottom: 1px solid #252542;
-            font-size: 0.95rem;
         }
 
         .sterge-produs {
@@ -323,17 +227,9 @@
             color: #ff4757;
             border: none;
             cursor: pointer;
-            font-weight: bold;
-            width: auto;
             font-size: 1.2rem;
-            transition: transform 0.2s;
         }
 
-            .sterge-produs:hover {
-                transform: scale(1.2);
-            }
-
-        /* PRODUCT CATALOG */
         .container {
             max-width: 1200px;
             margin: 3rem auto;
@@ -346,6 +242,7 @@
             gap: 2.5rem;
         }
 
+        /* CARD MODIFICAT PENTRU CLICK PE DETALII */
         .card {
             background: #1e1e38;
             padding: 1.8rem;
@@ -357,7 +254,7 @@
             text-align: center;
             justify-content: space-between;
             border: 1px solid #2d2d4f;
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            transition: transform 0.3s;
         }
 
             .card:hover {
@@ -372,19 +269,18 @@
             object-fit: contain;
             margin-bottom: 1.2rem;
             background-color: #111125;
+            cursor: pointer;
         }
 
         .card h3 {
             margin: 0.5rem 0;
             font-size: 1.3rem;
-            color: #fff;
+            cursor: pointer;
         }
 
-        .card p {
-            margin: 0 0 1.2rem 0;
-            color: #8a8aab;
-            font-size: 0.95rem;
-        }
+            .card h3:hover {
+                color: #00b4db;
+            }
 
         .pret {
             font-size: 1.5rem;
@@ -401,20 +297,132 @@
             border-radius: 10px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 1.05rem;
             width: 100%;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
             border-bottom: 3px solid #1f6594;
         }
 
-            .btn-cumpara:hover {
-                background: linear-gradient(135deg, #4aa3df 0%, #2e8ece 100%);
-                box-shadow: 0 6px 18px rgba(52, 152, 219, 0.5);
-                transform: translateY(-2px);
+        /* STILURILE PENTRU MODALUL DETALII (ZONA DESENATĂ DE TINE) */
+        .modal-fundal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+        .modal-continut {
+            background: #16162a;
+            width: 100%;
+            max-width: 850px;
+            border-radius: 20px;
+            border: 2px solid #00b4db;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,180,219,0.3);
+        }
+
+        .inchide-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #ff4757;
+            font-size: 1.8rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Layout-ul Orizontal exact ca în desen */
+        .detalii-layout {
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        .detalii-stanga {
+            flex: 1;
+            text-align: center;
+            background: #111125;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #2d2d4f;
+        }
+
+            .detalii-stanga img {
+                max-width: 100%;
+                max-height: 250px;
+                object-fit: contain;
             }
 
-        /* NOTIFICATION */
+        .detalii-dreapta {
+            flex: 1.5;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .detalii-nume {
+            font-size: 1.8rem;
+            margin: 0;
+            color: #fff;
+        }
+
+        .detalii-pret {
+            font-size: 1.6rem;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .detalii-rating-mediu {
+            font-size: 1.1rem;
+            color: #f1c40f;
+            font-weight: bold;
+        }
+
+        /* Secțiunea Comentarii */
+        .sectiune-comentarii {
+            margin-top: 20px;
+            border-top: 1px solid #252542;
+            padding-top: 20px;
+        }
+
+        .lista-comentarii {
+            max-height: 180px;
+            overflow-y: auto;
+            background: #111125;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #2d2d4f;
+        }
+
+        .comentariu-item {
+            border-bottom: 1px solid #252542;
+            padding: 10px 0;
+            font-size: 0.95rem;
+        }
+
+            .comentariu-item:last-child {
+                border-bottom: none;
+            }
+
+        .comentariu-user {
+            color: #00b4db;
+            font-weight: bold;
+        }
+
+        .comentariu-stele {
+            color: #f1c40f;
+            margin-left: 10px;
+        }
+
         .notificare {
             position: fixed;
             top: -100px;
@@ -425,14 +433,8 @@
             padding: 16px 32px;
             border-radius: 12px;
             font-weight: bold;
-            font-size: 1.1rem;
-            box-shadow: 0 10px 25px rgba(46, 204, 113, 0.4);
-            z-index: 2000;
-            transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid #2ed573;
+            z-index: 3000;
+            transition: top 0.5s;
         }
 
             .notificare.afisat {
@@ -441,12 +443,13 @@
 
             .notificare.eroare {
                 background: linear-gradient(135deg, #ff4757 0%, #ee5253 100%);
-                box-shadow: 0 10px 25px rgba(255, 71, 87, 0.4);
-                border: 1px solid #ff6b81;
             }
 
-        /* RESPONSIVE MOBILE */
         @media (max-width: 768px) {
+            .detalii-layout {
+                flex-direction: column;
+            }
+
             header {
                 padding: 5rem 1rem 1.5rem 1rem;
             }
@@ -455,28 +458,9 @@
                 position: fixed;
                 top: 12px;
                 left: 12px;
-                transform: none;
-                z-index: 999;
-                gap: 8px;
                 width: calc(100% - 24px);
                 justify-content: space-between;
-            }
-
-            .cos-buton, .user-buton {
-                padding: 8px 14px;
-                font-size: 0.85rem;
-            }
-
-            .panou-lateral {
-                width: 85%;
-            }
-
-            .lista-produse {
-                gap: 1.5rem;
-            }
-
-            .produs-img {
-                height: 160px;
+                z-index: 999;
             }
         }
     </style>
@@ -487,33 +471,68 @@
 
     <header>
         <div class="antet-butoane">
-            <button class="cos-buton" onclick="toggleCart()">
-                Coș <span id="cos-contor" class="cos-contor">0</span>
-            </button>
-            <button class="user-buton" id="btn-meniu-user" onclick="toggleUserMenu()">
-                Contul meu
-            </button>
+            <button class="cos-buton" onclick="toggleCart()">Coș <span id="cos-contor" class="cos-contor">0</span></button>
+            <button class="user-buton" id="btn-meniu-user" onclick="toggleUserMenu()">Contul meu</button>
         </div>
         <h1>Orion Shop</h1>
         <p style="color: #8a8aab; margin: 5px 0 0 0;">Magazinul Orion făcut de Octavian</p>
     </header>
+
+    <div id="produs-modal" class="modal-fundal">
+        <div class="modal-continut">
+            <button class="inchide-modal" onclick="closeProductModal()">X</button>
+
+            <div class="detalii-layout">
+                <div class="detalii-stanga">
+                    <img id="modal-img" src="" alt="">
+                </div>
+
+                <div class="detalii-dreapta">
+                    <h2 id="modal-nume" class="detalii-nume">Nume Produs</h2>
+                    <div id="modal-pret" class="detalii-pret">0.00 RON</div>
+                    <div id="modal-rating-mediu" class="detalii-rating-mediu">⭐⭐⭐⭐⭐ (5.0)</div>
+                    <p id="modal-descriere" style="color: #8a8aab; margin: 0;"></p>
+
+                    <button id="modal-btn-adauga" class="btn-cumpara" style="font-size: 1.1rem; padding: 15px 0;">Adaugă în coș</button>
+                </div>
+            </div>
+
+            <div class="sectiune-comentarii">
+                <h3>Recenzii și Comentarii</h3>
+                <div id="modal-lista-comentarii" class="lista-comentarii"></div>
+
+                <div class="formular-orion" style="background: #111125;">
+                    <h4 style="margin: 0 0 10px 0; color: #00b4db;">Adaugă recenzia ta:</h4>
+                    <div style="display: flex; gap: 15px; margin-bottom: 10px;">
+                        <div class="grup-input" style="flex: 1; margin: 0;">
+                            <label>Rating (Stele)</label>
+                            <select id="nou-comentariu-rating">
+                                <option value="5">⭐⭐⭐⭐⭐ (5 Stele)</option>
+                                <option value="4">⭐⭐⭐⭐ (4 Stele)</option>
+                                <option value="3">⭐⭐⭐ (3 Stele)</option>
+                                <option value="2">⭐⭐ (2 Stele)</option>
+                                <option value="1">⭐ (1 Stea)</option>
+                            </select>
+                        </div>
+                        <div class="grup-input" style="flex: 3; margin: 0;">
+                            <label>Comentariul tău</label>
+                            <input type="text" id="nou-comentariu-text" placeholder="Ex: acest produs a fost foarte bun...">
+                        </div>
+                    </div>
+                    <button class="btn-actiune" onclick="submitNewComment()">Trimite Comentariul</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="cos-panou" class="panou-lateral">
         <div class="panou-antet">
             <h2>Coșul tău</h2>
             <button class="inchide-panou" onclick="toggleCart()">X</button>
         </div>
-
         <button class="buton-plata-sus" onclick="sendOrderToServer()">Finalizează Comanda</button>
-
-        <div class="cos-total">
-            <span>Total:</span>
-            <span id="cos-total-pret">0.00 RON</span>
-        </div>
-
-        <div id="cos-elemente" class="cos-elemente">
-            <p style="color: #6a6a8a; text-align: center;">Coșul este gol.</p>
-        </div>
+        <div class="cos-total"><span>Total:</span><span id="cos-total-pret">0.00 RON</span></div>
+        <div id="cos-elemente" class="cos-elemente"><p style="color: #6a6a8a; text-align: center;">Coșul este gol.</p></div>
     </div>
 
     <div id="user-panou" class="panou-lateral">
@@ -521,37 +540,24 @@
             <h2 id="user-titlu-panou">Autentificare</h2>
             <button class="inchide-panou" onclick="toggleUserMenu()">X</button>
         </div>
-
         <div id="sectiune-vizitator">
             <div class="comutator-mod">
                 <button id="btn-mod-login" class="activ" onclick="switchUserMode('login')">Sign In</button>
                 <button id="btn-mod-register" onclick="switchUserMode('register')">Sign Up</button>
             </div>
-
             <div class="formular-orion">
-                <div class="grup-input">
-                    <label>Nume Utilizator / User</label>
-                    <input type="text" id="auth-username" placeholder="Ex: Octavian363">
-                </div>
-                <div class="grup-input">
-                    <label>Parolă / Password</label>
-                    <input type="password" id="auth-password" placeholder="••••••••">
-                </div>
-                <div class="grup-input" id="grup-input-adresa" style="display: none;">
-                    <label>Adresă Completă Livrare</label>
-                    <input type="text" id="auth-address" placeholder="Oraș, Stradă, Număr">
-                </div>
-
+                <div class="grup-input"><label>User</label><input type="text" id="auth-username" placeholder="Ex: Octavian363"></div>
+                <div class="grup-input"><label>Password</label><input type="password" id="auth-password" placeholder="••••••••"></div>
+                <div class="grup-input" id="grup-input-adresa" style="display: none;"><label>Adresă Livrare</label><input type="text" id="auth-address" placeholder="Oraș, Stradă"></div>
                 <button class="btn-actiune" id="btn-auth-trimite" onclick="executeAuthentication()">Sign In</button>
             </div>
         </div>
-
         <div id="sectiune-conectat" style="display: none;">
             <div class="info-status-conectat">
                 <h3 style="color: #2ecc71; margin-top: 0;">Cont Conectat</h3>
-                <p id="info-user-salut" style="font-size: 1.1rem; font-weight: bold;"></p>
-                <p id="info-user-adresa" style="color: #8a8aab; font-size: 0.9rem;"></p>
-                <button class="btn-deconectare" onclick="signOutUser()">Deconectare / Sign Out</button>
+                <p id="info-user-salut" style="font-weight: bold;"></p>
+                <p id="info-user-adresa" style="color: #8a8aab;"></p>
+                <button class="btn-deconectare" onclick="signOutUser()">Sign Out</button>
             </div>
         </div>
     </div>
@@ -562,252 +568,202 @@
 
     <script>
         const BACKEND_URL = "";
-
         let cart = [];
         let products = [];
         let currentAuthMode = 'login';
         let loggedInUser = null;
+        let activeModalProductId = null;
 
-        function toggleCart() {
-        document.getElementById('cos-panou').classList.toggle('deschis');
-        document.getElementById('user-panou').classList.remove('deschis');
-        }
-
-        function toggleUserMenu() {
-        document.getElementById('user-panou').classList.toggle('deschis');
-        document.getElementById('cos-panou').classList.remove('deschis');
-        }
+        function toggleCart() { document.getElementById('cos-panou').classList.toggle('deschis'); document.getElementById('user-panou').classList.remove('deschis'); }
+        function toggleUserMenu() { document.getElementById('user-panou').classList.toggle('deschis'); document.getElementById('cos-panou').classList.remove('deschis'); }
 
         function switchUserMode(mode) {
-        document.getElementById('user-panou').scrollTop = 0;
         currentAuthMode = mode;
         const btnLogin = document.getElementById('btn-mod-login');
         const btnRegister = document.getElementById('btn-mod-register');
         const addressGroup = document.getElementById('grup-input-adresa');
         const btnSubmit = document.getElementById('btn-auth-trimite');
-
-        if (mode === 'login') {
-        btnLogin.classList.add('activ');
-        btnRegister.classList.remove('activ');
-        addressGroup.style.display = 'none';
-        btnSubmit.innerText = 'Sign In';
-        } else {
-        btnRegister.classList.add('activ');
-        btnLogin.classList.remove('activ');
-        addressGroup.style.display = 'block';
-        btnSubmit.innerText = 'Sign Up (Creare Cont)';
-        }
+        if (mode === 'login') { btnLogin.classList.add('activ'); btnRegister.classList.remove('activ'); addressGroup.style.display = 'none'; btnSubmit.innerText = 'Sign In'; }
+        else { btnRegister.classList.add('activ'); btnLogin.classList.remove('activ'); addressGroup.style.display = 'block'; btnSubmit.innerText = 'Sign Up'; }
         }
 
         function showNotification(message, isError = false) {
-        const el = document.getElementById('zona-notificare');
-        el.innerText = message;
+        const el = document.getElementById('zona-notificare'); el.innerText = message;
         if (isError) el.classList.add('eroare'); else el.classList.remove('eroare');
-        el.classList.add('afisat');
-        setTimeout(() => { el.classList.remove('afisat'); }, 4000);
+        el.classList.add('afisat'); setTimeout(() => { el.classList.remove('afisat'); }, 4000);
         }
 
-        function checkLoginState() {
-        const stored = localStorage.getItem('orion_user_session');
-        if (stored) {
-        loggedInUser = JSON.parse(stored);
-        updateUserInterface();
-        }
-        }
-
+        function checkLoginState() { const stored = localStorage.getItem('orion_user_session'); if (stored) { loggedInUser = JSON.parse(stored); updateUserInterface(); } }
         function updateUserInterface() {
-        const secVisitor = document.getElementById('sectiune-vizitator');
-        const secConnected = document.getElementById('sectiune-conectat');
-        const btnMenu = document.getElementById('btn-meniu-user');
-
-        if (loggedInUser) {
-        secVisitor.style.display = 'none';
-        secConnected.style.display = 'block';
-        btnMenu.innerText = `${loggedInUser.username}`;
-        document.getElementById('info-user-salut').innerText = `Salut, ${loggedInUser.username}!`;
-        document.getElementById('info-user-adresa').innerText = `Adresă: ${loggedInUser.address}`;
-        } else {
-        secVisitor.style.display = 'block';
-        secConnected.style.display = 'none';
-        btnMenu.innerText = 'Contul meu';
-        }
+        const secVisitor = document.getElementById('sectiune-vizitator'); const secConnected = document.getElementById('sectiune-conectat'); const btnMenu = document.getElementById('btn-meniu-user');
+        if (loggedInUser) { secVisitor.style.display = 'none'; secConnected.style.display = 'block'; btnMenu.innerText = `${loggedInUser.username}`; document.getElementById('info-user-salut').innerText = `Salut, ${loggedInUser.username}!`; document.getElementById('info-user-adresa').innerText = `Adresă: ${loggedInUser.address}`; }
+        else { secVisitor.style.display = 'block'; secConnected.style.display = 'none'; btnMenu.innerText = 'Contul meu'; }
         }
 
         async function executeAuthentication() {
-        const username = document.getElementById('auth-username').value.trim();
-        const password = document.getElementById('auth-password').value.trim();
-        const address = document.getElementById('auth-address').value.trim();
-
-        if (!username || !password) {
-        showNotification("Introdu numele de utilizator și parola!", true);
-        return;
-        }
-
-        if (currentAuthMode === 'register' && !address) {
-        showNotification("Te rugăm să adaugi o adresă de livrare!", true);
-        return;
-        }
-
+        const username = document.getElementById('auth-username').value.trim(); const password = document.getElementById('auth-password').value.trim(); const address = document.getElementById('auth-address').value.trim();
+        if (!username || !password) { showNotification("Introdu userul și parola!", true); return; }
+        if (currentAuthMode === 'register' && !address) { showNotification("Adaugă o adresă!", true); return; }
         const route = currentAuthMode === 'login' ? '/api/login' : '/api/register';
-        const dataToSend = currentAuthMode === 'login' ? { username, password } : { username, password, address };
-
         try {
-        const response = await fetch(BACKEND_URL + route, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dataToSend)
-        });
+        const response = await fetch(BACKEND_URL + route, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password, address }) });
         const data = await response.json();
-
         if (data.success) {
         showNotification(data.message);
-        if (currentAuthMode === 'login') {
-        loggedInUser = data.user;
-        localStorage.setItem('orion_user_session', JSON.stringify(data.user));
-        updateUserInterface();
-        toggleUserMenu();
-        } else {
-        switchUserMode('login');
-        }
-        document.getElementById('auth-username').value = "";
-        document.getElementById('auth-password').value = "";
-        document.getElementById('auth-address').value = "";
-        } else {
-        showNotification(data.message, true);
-        }
-        } catch (e) {
-        showNotification("Problemă de conexiune cu serverul.", true);
-        }
+        if (currentAuthMode === 'login') { loggedInUser = data.user; localStorage.setItem('orion_user_session', JSON.stringify(data.user)); updateUserInterface(); toggleUserMenu(); }
+        else { switchUserMode('login'); }
+        } else { showNotification(data.message, true); }
+        } catch (e) { showNotification("Eroare de conexiune.", true); }
         }
 
-        function signOutUser() {
-        loggedInUser = null;
-        localStorage.removeItem('orion_user_session');
-        updateUserInterface();
-        showNotification("Te-ai deconectat cu succes!");
-        }
+        function signOutUser() { loggedInUser = null; localStorage.removeItem('orion_user_session'); updateUserInterface(); showNotification("Te-ai deconectat!"); }
 
         async function fetchProducts() {
         try {
         const response = await fetch(BACKEND_URL + "/api/produse");
         products = await response.json();
-        const container = document.getElementById('lista-produse');
-        container.innerHTML = "";
-
+        const container = document.getElementById('lista-produse'); container.innerHTML = "";
         products.forEach(p => {
-        const productName = p.name || p.nume;
-        const productDescription = p.description || p.descriere || "";
-        const productPrice = p.price !== undefined ? p.price : p.pret;
-        const productImage = p.image || p.imagine || "https://via.placeholder.com/200";
-
         container.innerHTML += `
         <div class="card">
-        <img src="${productImage}" class="produs-img" alt="${productName}">
-        <h3>${productName}</h3>
-        <p>${productDescription}</p>
-        <div class="pret">${Number(productPrice).toFixed(2)} RON</div>
+        <img src="${p.image}" class="produs-img" alt="${p.name}" onclick="openProductModal(${p.id})">
+        <h3 onclick="openProductModal(${p.id})">${p.name}</h3>
+        <p>${p.description}</p>
+        <div class="pret">${Number(p.price).toFixed(2)} RON</div>
         <button class="btn-cumpara" onclick="addToCart(${p.id})">Adaugă în coș</button>
         </div>
         `;
         });
+        } catch (e) { document.getElementById('lista-produse').innerHTML = "Eroare la încărcare."; }
+        }
+
+        // DESCHIDEREA POP-UP-ULUI DESENAT DE TINE
+        async function openProductModal(id) {
+        const product = products.find(p => p.id === id);
+        if (!product) return;
+        activeModalProductId = id;
+
+        document.getElementById('modal-img').src = product.image;
+        document.getElementById('modal-nume').innerText = product.name;
+        document.getElementById('modal-pret').innerText = Number(product.price).toFixed(2) + " RON";
+        document.getElementById('modal-descriere').innerText = product.description;
+        document.getElementById('modal-btn-adauga').onclick = () => { addToCart(id); };
+
+        await refreshCommentsUI(id);
+        document.getElementById('produs-modal').style.display = 'flex';
+        }
+
+        function closeProductModal() {
+        document.getElementById('produs-modal').style.display = 'none';
+        activeModalProductId = null;
+        }
+
+        // ÎNCĂRCAREA COMENTARIILOR DIN SERVER PENTRU POP-UP
+        async function refreshCommentsUI(productId) {
+        const container = document.getElementById('modal-lista-comentarii');
+        container.innerHTML = "Se încarcă recenziile...";
+
+        try {
+        const response = await fetch(`${BACKEND_URL}/api/comentarii/${productId}`);
+        const comments = await response.json();
+
+        if (comments.length === 0) {
+        container.innerHTML = `<p style="color: #6a6a8a; margin: 0;">Nicio recenzie momentan. Fii primul care adaugă una!</p>`;
+        document.getElementById('modal-rating-mediu').innerText = "Fără rating";
+        return;
+        }
+
+        container.innerHTML = "";
+        let totalStars = 0;
+
+        comments.forEach(c => {
+        totalStars += c.rating;
+        const stars = "⭐".repeat(c.rating);
+        container.innerHTML += `
+        <div class="comentariu-item">
+        <span class="comentariu-user">${c.username}:</span>
+        <span class="comentariu-stele">${stars}</span>
+        <p style="margin: 5px 0 0 0; color: #d1d1e0;">${c.text}</p>
+        </div>
+        `;
+        });
+
+        const medie = (totalStars / comments.length).toFixed(1);
+        document.getElementById('modal-rating-mediu').innerText = `⭐`.repeat(Math.round(medie)) + ` (${medie} / 5 din ${comments.length} voturi)`;
         } catch (e) {
-        document.getElementById('lista-produse').innerHTML = "Eroare la încărcarea produselor.";
+        container.innerHTML = "Nu s-au putut încărca comentariile.";
+        }
+        }
+
+        // TRIMITEREA UNUI COMENTARIU NOU PE SERVER (RAILWAY)
+        async function submitNewComment() {
+        if (!loggedInUser) {
+        showNotification("Trebuie să fii conectat ca să lași un comentariu!", true);
+        toggleUserMenu();
+        return;
+        }
+
+        const text = document.getElementById('nou-comentariu-text').value.trim();
+        const rating = document.getElementById('nou-comentariu-rating').value;
+
+        if (!text) {
+        showNotification("Scrie un text pentru comentariu!", true);
+        return;
+        }
+
+        try {
+        const response = await fetch(BACKEND_URL + '/api/comentarii', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+        productId: activeModalProductId,
+        username: loggedInUser.username,
+        rating: rating,
+        text: text
+        })
+        });
+        const result = await response.json();
+
+        if (result.success) {
+        showNotification(result.message);
+        document.getElementById('nou-comentariu-text').value = "";
+        await refreshCommentsUI(activeModalProductId);
+        } else {
+        showNotification(result.message, true);
+        }
+        } catch (e) {
+        showNotification("Eroare la trimiterea comentariului.", true);
         }
         }
 
         function addToCart(id) {
         const product = products.find(p => p.id === id);
-        if (product) {
-        cart.push(product);
-        updateCartUI();
-        showNotification("Produs adăugat în coș!");
+        if (product) { cart.push(product); updateCartUI(); showNotification("Produs adăugat în coș!"); }
         }
-        }
-
-        function removeFromCart(index) {
-        cart.splice(index, 1);
-        updateCartUI();
-        }
-
+        function removeFromCart(index) { cart.splice(index, 1); updateCartUI(); }
         function updateCartUI() {
-        document.getElementById('cos-contor').innerText = cart.length;
-        const elementsContainer = document.getElementById('cos-elemente');
-
-        if (cart.length === 0) {
-        elementsContainer.innerHTML = '<p style="color: #6a6a8a; text-align: center;">Coșul este gol.</p>';
-        } else {
+        document.getElementById('cos-contor').innerText = cart.length; const elementsContainer = document.getElementById('cos-elemente');
+        if (cart.length === 0) { elementsContainer.innerHTML = '<p style="color: #6a6a8a; text-align: center;">Coșul este gol.</p>'; }
+        else {
         elementsContainer.innerHTML = "";
-        cart.forEach((p, index) => {
-        const productName = p.name || p.nume;
-        const productPrice = p.price !== undefined ? p.price : p.pret;
-
-        elementsContainer.innerHTML += `
-        <div class="produs-cos">
-        <div>
-        <strong>${productName}</strong><br>
-        <span style="color: #2ecc71;">${Number(productPrice).toFixed(2)} RON</span>
-        </div>
-        <button class="sterge-produs" onclick="removeFromCart(${index})">Șterge</button>
-        </div>
-        `;
-        });
+        cart.forEach((p, idx) => { elementsContainer.innerHTML += `<div class="produs-cos"><div><strong>${p.name}</strong><br><span style="color: #2ecc71;">${Number(p.price).toFixed(2)} RON</span></div><button class="sterge-produs" onclick="removeFromCart(${idx})">X</button></div>`; });
         }
-
-        const total = cart.reduce((sum, p) => {
-        const productPrice = p.price !== undefined ? p.price : p.pret;
-        return sum + Number(productPrice);
-        }, 0);
-        document.getElementById('cos-total-pret').innerText = total.toFixed(2) + " RON";
+        const total = cart.reduce((sum, p) => sum + Number(p.price), 0); document.getElementById('cos-total-pret').innerText = total.toFixed(2) + " RON";
         }
 
         async function sendOrderToServer() {
-        if (!loggedInUser) {
-        showNotification("Trebuie să te conectezi (Sign In) pentru a trimite comanda!", true);
-        toggleUserMenu();
-        return;
-        }
-
-        if (cart.length === 0) {
-        showNotification("Adaugă produse în coș mai întâi!", true);
-        return;
-        }
-
-        const totalAmount = cart.reduce((sum, p) => {
-        const productPrice = p.price !== undefined ? p.price : p.pret;
-        return sum + Number(productPrice);
-        }, 0);
-
+        if (!loggedInUser) { showNotification("Conectează-te pentru a trimite comanda!", true); toggleUserMenu(); return; }
+        if (cart.length === 0) { showNotification("Coșul este gol!", true); return; }
+        const totalAmount = cart.reduce((sum, p) => sum + Number(p.price), 0);
         try {
-        const response = await fetch(BACKEND_URL + '/api/comanda', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-        products: cart,
-        total: totalAmount,
-        user: loggedInUser.username,
-        address: loggedInUser.address
-        })
-        });
-
+        const response = await fetch(BACKEND_URL + '/api/comanda', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ products: cart, total: totalAmount, user: loggedInUser.username, address: loggedInUser.address }) });
         const result = await response.json();
-
-        if (result.success || result.succes) {
-        showNotification(result.message || result.mesaj, false);
-        cart = [];
-        updateCartUI();
-        toggleCart();
-        } else {
-        showNotification(result.message || result.mesaj, true);
-        }
-        } catch (error) {
-        showNotification("Serverul nu a răspuns la comandă.", true);
-        }
+        if (result.success) { showNotification(result.message); cart = []; updateCartUI(); toggleCart(); }
+        else { showNotification(result.message, true); }
+        } catch (error) { showNotification("Eroare la trimiterea comenzii.", true); }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-        fetchProducts();
-        checkLoginState();
-        });
+        window.addEventListener('DOMContentLoaded', () => { fetchProducts(); checkLoginState(); });
     </script>
 </body>
 </html>
